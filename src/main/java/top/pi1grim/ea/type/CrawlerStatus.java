@@ -5,7 +5,7 @@ import lombok.Getter;
 
 @AllArgsConstructor
 @Getter
-public enum CrawlerStatus {
+public enum CrawlerStatus implements GenericEnum{
     INITIAL(10, "初始化"),
     LOGIN(15, "已登录"),
     DEEP_SEARCH(20, "深度搜索"),
