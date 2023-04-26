@@ -24,14 +24,15 @@ public class InterceptorConfig implements WebMvcConfigurer {
     public void addInterceptors(InterceptorRegistry registry) {
 
         String[] includePath = new String[]{
-
+            "/api/v3/user/**"
         };
 
         String[] excludePath = new String[]{
-
+            "/api/v3/user/login",
+            "/api/v3/user/register"
         };
 
         registry.addInterceptor(expireReset()).addPathPatterns("/**");
-//        registry.addInterceptor(tokenCheck()).addPathPatterns(includePath).excludePathPatterns(excludePath);
+        registry.addInterceptor(tokenCheck()).addPathPatterns(includePath).excludePathPatterns(excludePath);
     }
 }

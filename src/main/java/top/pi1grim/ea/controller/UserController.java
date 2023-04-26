@@ -128,4 +128,18 @@ public class UserController {
         log.info("更新用户配置信息成功 ====> " + user);
         return Response.success(SuccessCode.UPDATE_INFO_SUCCESS, dto);
     }
+
+    @GetMapping("/profile")
+    @Operation(summary = "获取用户配置信息API", description = "使用GET请求，成功返回新配置，成功代码2010")
+    public Response profile(HttpServletRequest request) {
+
+        JSONObject session = tokenService.getSession(request);
+        User user = session.getObject("user", User.class);
+
+        ProfileDTO dto = ProfileDTO.builder().build();
+        EntityUtils.assign(dto, user);
+
+        log.info("获取用户配置信息成功 ====> " + dto);
+        return Response.success(SuccessCode.RETURN_INFO_SUCCESS, dto);
+    }
 }
