@@ -79,7 +79,7 @@ public class UserController {
     @Operation(summary = "用户登录API", description = "使用POST请求，成功返回用户名，成功代码2005")
     public Response register(@RequestBody LoginDTO dto, HttpServletRequest request) {
 
-        String token = request.getHeader("token");
+        String token = tokenService.getToken(request);
         if (StringUtils.isNotEmpty(token)) {
             return Response.success(SuccessCode.LOGIN_SUCCESS, token);
         }
