@@ -20,11 +20,13 @@ public class SessionController {
     @PutMapping
     public Response put(String key, String value, HttpServletRequest request) {
         tokenService.sessionPut(request, key, value);
+        log.info("存储了数据 ====> " + key + " : " + value);
         return Response.success(SuccessCode.SESSION_PUT, key);
     }
 
     @GetMapping
     public Response get(String key, HttpServletRequest request) {
+        log.info("获取了数据 ====> " + key);
         return Response.success(SuccessCode.SESSION_GET, tokenService.sessionGet(request, key));
     }
 }
