@@ -13,6 +13,8 @@ public enum SuccessCode implements GenericEnum{
     SESSION_PUT(2020, "Session存储数据成功"),
     SESSION_GET(2025, "获取Session数据成功"),
     ADD_STUDENT_SUCCESS(2030, "添加学生信息成功"),
+    GET_STUDENT_SUCCESS(2035, "返回学生信息成功"),
+
     ;
     private final int code;
     private final String message;
