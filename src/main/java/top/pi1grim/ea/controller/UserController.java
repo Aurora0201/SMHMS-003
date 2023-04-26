@@ -95,6 +95,6 @@ public class UserController {
 
         template.boundValueOps(token).set(session.toString(), RedisConstant.TOKEN_EXPIRE_TIME, TimeUnit.SECONDS);
         log.info("登录成功 ====> " + session);
-        return Response.success(SuccessCode.LOGIN_SUCCESS, dto.getUsername());
+        return Response.success(SuccessCode.LOGIN_SUCCESS, token);
     }
 }
