@@ -130,8 +130,7 @@ public class UserController {
     @Operation(summary = "获取用户配置信息API", description = "使用GET请求，成功返回新配置，成功代码2010")
     public Response profile(HttpServletRequest request) {
 
-        JSONObject session = tokenService.getSession(request);
-        User user = session.getObject("user", User.class);
+        User user = tokenService.sessionGetObject(request, "user", User.class);
 
         ProfileDTO dto = ProfileDTO.builder().build();
         EntityUtils.assign(dto, user);
