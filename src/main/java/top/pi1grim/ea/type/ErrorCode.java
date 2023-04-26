@@ -13,6 +13,7 @@ public enum ErrorCode{
     DUPLICATE_USERNAME(1015, HttpStatus.OK, "用户已存在，请选择其他用户名"),
     NOT_EXIST_USER(1020, HttpStatus.OK, "不存在的用户，请注册"),
     USERNAME_PASSWORD_MISMATCH(1025, HttpStatus.OK, "账号密码不匹配，请重新输入"),
+    STUDENT_EXIST(1030, HttpStatus.OK, "学生已存在，请勿重复添加"),
     ;
     private final int code;
     private final HttpStatus status;

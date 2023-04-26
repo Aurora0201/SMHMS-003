@@ -12,7 +12,7 @@ public enum SuccessCode implements GenericEnum{
     UPDATE_INFO_SUCCESS(2015, "更新用户信息成功"),
     SESSION_PUT(2020, "Session存储数据成功"),
     SESSION_GET(2025, "获取Session数据成功"),
-
+    ADD_STUDENT_SUCCESS(2030, "添加学生信息成功"),
     ;
     private final int code;
     private final String message;
