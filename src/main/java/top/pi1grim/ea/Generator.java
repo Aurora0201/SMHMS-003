@@ -19,7 +19,10 @@ public class Generator {
                             .pathInfo(Collections.singletonMap(OutputFile.xml, "/home/binjunkai/SMHMS-003/src/main/resources/mapper")); // 设置mapperXml生成路径
                 })
                 .strategyConfig(builder -> {
-                    builder.entityBuilder()
+                    builder
+//                            .addInclude("student")
+                            .entityBuilder()
+//                            .enableFileOverride()
                             .enableLombok()
                             .enableRemoveIsPrefix()
                             .enableChainModel()
