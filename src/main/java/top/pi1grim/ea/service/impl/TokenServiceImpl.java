@@ -18,4 +18,8 @@ public class TokenServiceImpl implements TokenService {
         String token = request.getHeader("token");
         return JSON.parseObject(template.boundValueOps(token).get());
     }
+
+    public String getToken(HttpServletRequest request) {
+        return request.getHeader("token");
+    }
 }

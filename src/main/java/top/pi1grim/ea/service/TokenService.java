@@ -5,4 +5,6 @@ import jakarta.servlet.http.HttpServletRequest;
 
 public interface TokenService {
     JSONObject getSession(HttpServletRequest request);
+
+    String getToken(HttpServletRequest request);
 }
