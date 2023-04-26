@@ -7,7 +7,6 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang.StringUtils;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.web.bind.annotation.*;
 import top.pi1grim.ea.common.response.Response;
@@ -23,8 +22,6 @@ import top.pi1grim.ea.service.TokenService;
 import top.pi1grim.ea.service.UserService;
 import top.pi1grim.ea.type.ErrorCode;
 import top.pi1grim.ea.type.SuccessCode;
-
-import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
