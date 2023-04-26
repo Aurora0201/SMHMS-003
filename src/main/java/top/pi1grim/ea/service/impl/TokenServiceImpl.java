@@ -6,7 +6,10 @@ import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
+import top.pi1grim.ea.core.constant.RedisConstant;
 import top.pi1grim.ea.service.TokenService;
+
+import java.util.concurrent.TimeUnit;
 
 @Service
 public class TokenServiceImpl implements TokenService {
@@ -24,7 +27,7 @@ public class TokenServiceImpl implements TokenService {
     }
 
     public void boundSession(HttpServletRequest request, JSONObject session) {
-        template.boundValueOps(getToken(request)).set(session.toString());
+        template.boundValueOps(getToken(request)).set(session.toString(), RedisConstant.TOKEN_EXPIRE_TIME, TimeUnit.SECONDS);
     }
 
     public void sessionPut(HttpServletRequest request, String key, Object value) {
