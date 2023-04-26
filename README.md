@@ -70,7 +70,7 @@
 | password | 符合密码要求   | 用户登录时密码   | String |
 | mail     | 合法邮箱格式   | 发送报告时邮箱   | String |
 | phone    | 符合手机号要求 | 发送提醒时手机号 | String |
-| step     | 0 < step < 255 | 深度搜索时步长   | String |
+| step     | 0 < step < 255 | 深度搜索时步长   | Byte   |
 
 后端实现：
 
