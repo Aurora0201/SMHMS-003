@@ -78,7 +78,12 @@ public class UserController {
 
     @PostMapping("/login")
     @Operation(summary = "用户登录API", description = "使用POST请求，成功返回用户名，成功代码2005")
-    public Response register(@RequestBody LoginDTO dto) {
+    public Response register(@RequestBody LoginDTO dto, HttpServletRequest request) {
+
+        String token = request.getHeader("token");
+        if (StringUtils.isNotEmpty(token)) {
+            return Response.success(SuccessCode.LOGIN_SUCCESS, token);
+        }
 
         if (Objects.isNull(dto) || EntityUtils.fieldIsNull(dto)) {
             throw new UserException(ErrorCode.ILLEGAL_REQUEST_BODY, dto);
@@ -97,7 +102,7 @@ public class UserController {
         session.put("user", user);
         session.put("login_time", Instant.now());
 
-        String token = JWTUtils.genToken(dto.getUsername());
+        token = JWTUtils.genToken(dto.getUsername());
 
         template.boundValueOps(token).set(session.toString(), RedisConstant.TOKEN_EXPIRE_TIME, TimeUnit.SECONDS);
         log.info("登录成功 ====> " + session);
