@@ -11,7 +11,6 @@ import top.pi1grim.ea.common.response.Response;
 import top.pi1grim.ea.common.utils.EntityUtils;
 import top.pi1grim.ea.dto.ItemDTO;
 import top.pi1grim.ea.entity.Student;
-import top.pi1grim.ea.entity.User;
 import top.pi1grim.ea.exception.StudentException;
 import top.pi1grim.ea.service.StudentService;
 import top.pi1grim.ea.service.TokenService;
