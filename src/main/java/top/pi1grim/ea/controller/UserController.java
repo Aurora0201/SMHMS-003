@@ -116,7 +116,7 @@ public class UserController {
             throw new UserException(ErrorCode.ILLEGAL_REQUEST_BODY, dto);
         }
 
-        String token = request.getHeader("token");
+        String token = tokenService.getToken(request);
 
         JSONObject session = tokenService.getSession(request);
         User user = session.getObject("user", User.class);
