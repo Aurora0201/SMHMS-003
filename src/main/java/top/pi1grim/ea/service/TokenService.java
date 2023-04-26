@@ -8,6 +8,8 @@ public interface TokenService {
 
     String getToken(HttpServletRequest request);
 
+    void boundSession(HttpServletRequest request, JSONObject session);
+
     void sessionPut(HttpServletRequest request, String key, Object value);
 
     String sessionGet(HttpServletRequest request, String key);
