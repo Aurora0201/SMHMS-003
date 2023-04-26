@@ -10,7 +10,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.stereotype.Controller;
 import top.pi1grim.ea.common.response.Response;
 import top.pi1grim.ea.common.utils.EntityUtils;
 import top.pi1grim.ea.common.utils.JWTUtils;
@@ -78,7 +77,12 @@ public class UserController {
 
     @PostMapping("/login")
     @Operation(summary = "用户登录API", description = "使用POST请求，成功返回用户名，成功代码2005")
-    public Response register(@RequestBody LoginDTO dto) {
+    public Response register(@RequestBody LoginDTO dto, HttpServletRequest request) {
+
+        String token = tokenService.getToken(request);
+        if (StringUtils.isNotEmpty(token)) {
+            return Response.success(SuccessCode.LOGIN_SUCCESS, token);
+        }
 
         if (Objects.isNull(dto) || EntityUtils.fieldIsNull(dto)) {
             throw new UserException(ErrorCode.ILLEGAL_REQUEST_BODY, dto);
@@ -97,7 +101,7 @@ public class UserController {
         session.put("user", user);
         session.put("login_time", Instant.now());
 
-        String token = JWTUtils.genToken(dto.getUsername());
+        token = JWTUtils.genToken(dto.getUsername());
 
         template.boundValueOps(token).set(session.toString(), RedisConstant.TOKEN_EXPIRE_TIME, TimeUnit.SECONDS);
         log.info("登录成功 ====> " + session);
@@ -112,17 +116,10 @@ public class UserController {
             throw new UserException(ErrorCode.ILLEGAL_REQUEST_BODY, dto);
         }
 
-        String token = request.getHeader("token");
-
-        JSONObject session = tokenService.getSession(request);
-        User user = session.getObject("user", User.class);
+        User user = tokenService.sessionGetObject(request, "user", User.class);
 
         EntityUtils.assign(user, dto);
-        //更新缓存
-        session.put("user", user);
-        template.boundValueOps(token).set(session.toString());
-
-        //更新数据库
+        tokenService.sessionPut(request, "user", user);
         userService.updateById(user);
 
         log.info("更新用户配置信息成功 ====> " + user);
@@ -133,8 +130,7 @@ public class UserController {
     @Operation(summary = "获取用户配置信息API", description = "使用GET请求，成功返回新配置，成功代码2010")
     public Response profile(HttpServletRequest request) {
 
-        JSONObject session = tokenService.getSession(request);
-        User user = session.getObject("user", User.class);
+        User user = tokenService.sessionGetObject(request, "user", User.class);
 
         ProfileDTO dto = ProfileDTO.builder().build();
         EntityUtils.assign(dto, user);

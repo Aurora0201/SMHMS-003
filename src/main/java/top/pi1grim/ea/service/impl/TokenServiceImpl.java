@@ -15,7 +15,31 @@ public class TokenServiceImpl implements TokenService {
     private StringRedisTemplate template;
 
     public JSONObject getSession(HttpServletRequest request) {
-        String token = request.getHeader("token");
+        String token = getToken(request);
         return JSON.parseObject(template.boundValueOps(token).get());
+    }
+
+    public String getToken(HttpServletRequest request) {
+        return request.getHeader("token");
+    }
+
+    public void boundSession(HttpServletRequest request, JSONObject session) {
+        template.boundValueOps(getToken(request)).set(session.toString());
+    }
+
+    public void sessionPut(HttpServletRequest request, String key, Object value) {
+        JSONObject session = getSession(request);
+        session.put(key, value);
+        boundSession(request, session);
+    }
+
+    public String sessionGet(HttpServletRequest request, String key) {
+        JSONObject session = getSession(request);
+        return session.getString(key);
+    }
+
+    public <T> T sessionGetObject(HttpServletRequest request, String key, Class<T> type) {
+        JSONObject session = getSession(request);
+        return session.getObject(key, type);
     }
 }
