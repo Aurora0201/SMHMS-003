@@ -18,7 +18,7 @@ spring:
   boot:
     admin:
       client:
-        url: http://localhost:8080
+        url: http://admin.pi1grim.top
 management:
   endpoints:
     web:
@@ -34,9 +34,10 @@ management:
 logging:
   file:
     name: boot.log
-    path: /var/log
+    path: /var/log/boot-ea.log
   pattern:
     file: '%clr(%d{yyyy-MM-dd HH:mm:ss.SSS}){faint} %clr(%5p) %clr(${PID}){magenta} %clr(---){faint} %clr([%15.15t]){faint} %clr(%-40.40logger{39}){cyan} %clr(:){faint} %m%n%wEx'
 server:
   servlet:
     context-path: /ea
+  port: 8081
