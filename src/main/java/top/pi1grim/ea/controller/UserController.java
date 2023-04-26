@@ -116,17 +116,10 @@ public class UserController {
             throw new UserException(ErrorCode.ILLEGAL_REQUEST_BODY, dto);
         }
 
-        String token = tokenService.getToken(request);
-
-        JSONObject session = tokenService.getSession(request);
-        User user = session.getObject("user", User.class);
+        User user = tokenService.sessionGetObject(request, "user", User.class);
 
         EntityUtils.assign(user, dto);
-        //更新缓存
-        session.put("user", user);
-        template.boundValueOps(token).set(session.toString());
-
-        //更新数据库
+        tokenService.sessionPut(request, "user", user);
         userService.updateById(user);
 
         log.info("更新用户配置信息成功 ====> " + user);

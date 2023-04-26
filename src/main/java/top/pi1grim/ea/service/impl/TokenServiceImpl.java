@@ -27,15 +27,9 @@ public class TokenServiceImpl implements TokenService {
         template.boundValueOps(getToken(request)).set(session.toString());
     }
 
-    public void sessionPut(HttpServletRequest request, String key, String value) {
+    public void sessionPut(HttpServletRequest request, String key, Object value) {
         JSONObject session = getSession(request);
         session.put(key, value);
-        boundSession(request, session);
-    }
-
-    public void sessionPutObject(HttpServletRequest request, String key, Object value) {
-        JSONObject session = getSession(request);
-        session.put(key, JSON.toJSONString(value));
         boundSession(request, session);
     }
 
