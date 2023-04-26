@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import top.pi1grim.ea.common.response.Response;
 import top.pi1grim.ea.common.utils.EntityUtils;
 import top.pi1grim.ea.dto.ItemDTO;
+import top.pi1grim.ea.dto.StudentDTO;
 import top.pi1grim.ea.entity.Student;
 import top.pi1grim.ea.exception.StudentException;
 import top.pi1grim.ea.service.StudentService;
@@ -18,6 +19,7 @@ import top.pi1grim.ea.type.ErrorCode;
 import top.pi1grim.ea.type.SuccessCode;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -45,7 +47,7 @@ public class StudentController {
         return studentService.getOne(new LambdaQueryWrapper<Student>()
                 .eq(Student::getNumber, number)
                 .eq(Student::getUserId, id)
-                .eq(Student::getIsDeleted, 0));
+                .eq(Student::getDeleted, false));
     }
 
     @PostMapping
@@ -73,5 +75,23 @@ public class StudentController {
 
         log.info("保存学生信息成功 ====> " + student);
         return Response.success(SuccessCode.ADD_STUDENT_SUCCESS, student);
+    }
+
+    @GetMapping
+    @Operation(summary = "获取学生API", description = "使用GET请求，成功返回学生的信息，成功代码2035")
+    public Response getStudent(HttpServletRequest request) {
+
+        Long id = tokenService.sessionGetObject(request, "id", Long.class);
+        List<Student> students = studentService.list(new LambdaQueryWrapper<Student>()
+                .eq(Student::getUserId, id)
+                .eq(Student::getDeleted, false));
+
+        List<StudentDTO> dtoList = students.stream().map(student -> {
+            StudentDTO dto = StudentDTO.builder().build();
+            EntityUtils.assign(dto, student);
+            return dto;
+        }).toList();
+
+        return Response.success(SuccessCode.GET_STUDENT_SUCCESS, dtoList);
     }
 }
