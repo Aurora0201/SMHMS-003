@@ -57,20 +57,20 @@ public class StudentController {
             throw new StudentException(ErrorCode.ILLEGAL_REQUEST_BODY, dto);
         }
 
-        User user = tokenService.sessionGetObject(request, "user", User.class);
+        Long id = tokenService.sessionGetObject(request, "id", Long.class);
 
-        if (Objects.nonNull(getOneByNumberAndUserId(dto.getNumber(), user.getId()))) {
+        if (Objects.nonNull(getOneByNumberAndUserId(dto.getNumber(), id))) {
             throw new StudentException(ErrorCode.STUDENT_EXIST, dto);
         }
 
         Student student = new Student()
                 .setCreateTime(LocalDateTime.now())
-                .setUserId(user.getId());
+                .setUserId(id);
         EntityUtils.assign(student, dto);
 
         studentService.save(student);
 
-        student = getOneByNumberAndUserId(dto.getNumber(), user.getId());
+        student = getOneByNumberAndUserId(dto.getNumber(), id);
 
         log.info("保存学生信息成功 ====> " + student);
         return Response.success(SuccessCode.ADD_STUDENT_SUCCESS, student);
