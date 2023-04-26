@@ -91,4 +91,23 @@
 
 ## Session API
 
-对于每一个用户，提供分布式共享Session对象来实现不同设备之间的信息共享，每个Session与token进行绑定
+对于每一个用户，提供分布式共享Session对象来实现不同设备之间的信息共享，每个Session与token进行绑定，意味着Session仅在用户登录期间有效，并且建议存储的数据应该是更新频率较低或者根本不更新的数据，防止读取到脏数据。对于用户来说Session其实就是一个Map，可以通过Key来获取Value
+
+
+
+### 存储数据
+
++ 使用PUT请求
++ 携带token
+
+| 字段  | 要求   | 说明      | 类型   |
+| ----- | ------ | --------- | ------ |
+| key   | 不为空 | 作为key   | String |
+| value | 不为空 | 作为value | String |
+
+后端实现：
+
++ 从headers中获取token
++ 从tRedis中获取session
++ 往session中存入数据
++ 更新Redis
