@@ -27,12 +27,7 @@ public class SessionController {
 
     @PutMapping
     public Response put(String key, String value, HttpServletRequest request) {
-
-        String token = tokenService.getToken(request);
-
-        JSONObject session = tokenService.getSession(request);
-        session.put(key, value);
-        template.boundValueOps(token).set(session.toString());
+        tokenService.sessionPut(request, key, value);
         return Response.success(SuccessCode.SESSION_PUT, key);
     }
 
