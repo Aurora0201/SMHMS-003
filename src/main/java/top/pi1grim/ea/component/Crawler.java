@@ -194,6 +194,9 @@ public class Crawler {
         if (!status.equals(CrawlerStatus.LEAVE_UNUSED) && !status.equals(CrawlerStatus.LISTEN)) {
             throw new CrawlerException(ErrorCode.WRONG_EXECUTE_TIMING, status);
         }
+
+        status = CrawlerStatus.DEEP_SEARCH;
+
         for (Map.Entry<String, NumberDTO> entry : students.entrySet()) {
             driver.get(URL + entry.getKey());
 
@@ -244,5 +247,6 @@ public class Crawler {
 
         }
         update();
+        status = CrawlerStatus.LEAVE_UNUSED;
     }
 }
