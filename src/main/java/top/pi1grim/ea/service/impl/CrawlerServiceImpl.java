@@ -1,6 +1,5 @@
 package top.pi1grim.ea.service.impl;
 
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import jakarta.annotation.Resource;
 import top.pi1grim.ea.component.Crawler;
 import top.pi1grim.ea.component.CrawlerFactory;
@@ -24,9 +23,7 @@ public class CrawlerServiceImpl implements CrawlerService {
     public File getQuick(Long id) {
         Crawler crawler = crawlerFactory.crawler();
 
-        List<Student> students = studentService.list(new LambdaQueryWrapper<Student>()
-                .eq(Student::getUserId, id)
-                .eq(Student::getDeleted, false));
+        List<Student> students = studentService.listByUserId(id);
 
         Map<String, String> map = new HashMap<>();
         students.forEach(student -> map.put(student.getNumber(), student.getNotes()));
