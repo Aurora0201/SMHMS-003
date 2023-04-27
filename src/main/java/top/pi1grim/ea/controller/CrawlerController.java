@@ -36,7 +36,7 @@ public class CrawlerController {
         Long id = tokenService.getId(request);
 
         File quick = crawlerService.getQuick(id);
-        //TODO
+        crawlerService.checkLogin(id);
 
         return Response.success(SuccessCode.GET_QUICK_SUCCESS, quick);
     }
