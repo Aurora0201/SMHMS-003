@@ -64,6 +64,7 @@ public class Crawler {
     public Crawler init() {
         status = CrawlerStatus.OFFLINE;
         driver = new ChromeDriver(OPTIONS);
+        update();
         log.info("Crawler初始化完成 ====> " + this);
         return this;
     }
