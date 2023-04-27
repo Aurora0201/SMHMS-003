@@ -56,4 +56,13 @@ public class CrawlerController {
         log.info("Crawler终止成功 ====> " + id);
         return Response.success(SuccessCode.STOP_CRAWLER_SUCCESS, id);
     }
+
+    @GetMapping("/deep")
+    @Operation(summary = "Crawler深度搜索API", description = "使用GET请求，成功启动返回id，成功代码2065")
+    public Response deepSearch(HttpServletRequest request) {
+        Long id = tokenService.getId(request);
+        crawlerService.deepSearch(id);
+        log.info("Crawler深度搜索启动成功 ====> " + id);
+        return Response.success(SuccessCode.START_DEEP_SUCCESS, id);
+    }
 }

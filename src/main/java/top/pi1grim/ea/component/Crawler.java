@@ -15,6 +15,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.time.Duration;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
@@ -36,6 +37,8 @@ public class Crawler {
     private ChromeDriver driver;
 
     private Long id;
+
+    private Byte step;
 
     private Long lastUse;
 
@@ -89,7 +92,7 @@ public class Crawler {
         return status;
     }
 
-    public void register(Long id, Map<String, String> students) {
+    public void register(Long id, Map<String, String> students, Byte step) {
         if (Objects.isNull(id)) {
             log.info("用户Id为空，注册失败，对象已销毁 ====> " + this);
             destroy();
@@ -97,7 +100,7 @@ public class Crawler {
         }
         this.id = id;
         this.students = students;
-
+        this.step = step;
         if (CRAWLER_MAP.containsKey(id)) {
             CRAWLER_MAP.get(id).destroy();
         }
@@ -155,4 +158,56 @@ public class Crawler {
 
     }
 
+
+    public void deepSearch() {
+        for (Map.Entry<String, String> entry : students.entrySet()) {
+            driver.get(URL + entry.getKey());
+
+            try {
+                driver.switchTo().frame("QM_Feeds_Iframe");
+                log.info("进入子页面成功 ====> " + id);
+                WebDriverWait wait10s = new WebDriverWait(driver, Duration.ofSeconds(10));
+
+                String beforeSrc = "";
+                String afterSrc = "";
+
+                List<WebElement> li;
+
+                do {
+                    beforeSrc = driver.getPageSource();
+
+                    JavascriptExecutor executor = driver;
+                    executor.executeScript("window.scrollTo(0, document.body.scrollHeight)");
+
+                    li = wait10s.until(ExpectedConditions.presenceOfElementLocated(By.id("host_home_feeds")))
+                            .findElements(By.className("f-single"));
+
+                    afterSrc = driver.getPageSource();
+                } while (li.size() < step && !beforeSrc.equals(afterSrc));
+
+                for (int i = 0; i < (li.size() > step ? step : li.size()); i++) {
+                    WebElement item = li.get(i);
+                    //时间提取
+                    WebElement time = item.findElement(By.className("f-single-head"))
+                            .findElement(By.className("user-info"))
+                            .findElement(By.className("info-detail"))
+                            .findElement(By.xpath("span"));
+
+                    System.out.println(time.getText());
+
+                    //内容提取
+                    WebElement content = item.findElement(By.className("f-single-content"))
+                            .findElement(By.className("f-item"))
+                            .findElement(By.className("f-info"));
+
+                    System.out.println(content.getText());
+
+                }
+
+            } catch (RuntimeException e) {
+                log.error("元素未找到 ====> " + id, e);
+            }
+
+        }
+    }
 }

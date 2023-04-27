@@ -12,4 +12,6 @@ public interface CrawlerService {
     CrawlerStatus getStatus(Long id);
 
     void destroy(Long id);
+
+    void deepSearch(Long id);
 }

@@ -19,6 +19,7 @@ public enum SuccessCode implements GenericEnum{
     GET_QUICK_SUCCESS(2050, "获取登录二维码成功"),
     GET_STATUS_SUCCESS(2055, "获取状态成功"),
     STOP_CRAWLER_SUCCESS(2060, "终止Crawler成功"),
+    START_DEEP_SUCCESS(2065, "启动深度搜索成功"),
 
     ;
     private final int code;

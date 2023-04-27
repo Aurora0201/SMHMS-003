@@ -8,8 +8,10 @@ import org.springframework.stereotype.Service;
 import top.pi1grim.ea.component.Crawler;
 import top.pi1grim.ea.component.CrawlerFactory;
 import top.pi1grim.ea.entity.Student;
+import top.pi1grim.ea.entity.User;
 import top.pi1grim.ea.service.CrawlerService;
 import top.pi1grim.ea.service.StudentService;
+import top.pi1grim.ea.service.UserService;
 import top.pi1grim.ea.type.CrawlerStatus;
 
 import java.io.File;
@@ -29,6 +31,9 @@ public class CrawlerServiceImpl implements CrawlerService {
     @Resource
     private StudentService studentService;
 
+    @Resource
+    private UserService userService;
+
     public byte[] getQuick(Long id) {
         Crawler crawler = crawlerFactory.crawler();
 
@@ -37,7 +42,9 @@ public class CrawlerServiceImpl implements CrawlerService {
         Map<String, String> map = new HashMap<>();
         students.forEach(student -> map.put(student.getNumber(), student.getNotes()));
 
-        crawler.register(id, map);
+        User user = userService.getById(id);
+
+        crawler.register(id, map, user.getStep());
         File quickFile = crawler.getQuick();
 
         byte[] quickBytes = null;
@@ -65,5 +72,11 @@ public class CrawlerServiceImpl implements CrawlerService {
     public void destroy(Long id) {
         Crawler crawler = Crawler.getCrawler(id);
         crawler.destroy();
+    }
+
+    @Async
+    public void deepSearch(Long id) {
+        Crawler crawler = Crawler.getCrawler(id);
+        crawler.deepSearch();
     }
 }
