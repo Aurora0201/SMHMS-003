@@ -78,7 +78,7 @@ public class StudentController {
     public Response getStudent(HttpServletRequest request) {
 
         Long id = tokenService.getId(request);
-        List<Student> students = studentService.listByUserId(id);
+        List<Student> students = studentService.listByUserIdIgnoreSelected(id);
 
         List<StudentDTO> dtoList = students.stream().map(student -> {
             StudentDTO dto = StudentDTO.builder().build();

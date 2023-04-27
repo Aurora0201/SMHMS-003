@@ -16,5 +16,5 @@ import java.util.List;
 public interface StudentService extends IService<Student> {
     Student getOneByNumberAndUserId(String number, Long id);
 
-    List<Student> listByUserId(Long id);
+    List<Student> listByUserIdIgnoreSelected(Long id);
 }
