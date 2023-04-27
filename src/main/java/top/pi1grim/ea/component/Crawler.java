@@ -108,7 +108,7 @@ public class Crawler {
     public File getQuick() {
         if (!status.equals(CrawlerStatus.OFFLINE)) {
             //只有离线状态才能调用这个方法
-            //TODO:抛出异常
+            throw new CrawlerException(ErrorCode.WRONG_LOGIN_TIMING, status);
         }
         driver.get(URL);
         File quickFile = null;
