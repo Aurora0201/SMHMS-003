@@ -267,3 +267,14 @@
 在理想的路线下应该是这样的
 
 ![crawler-front-process.drawio](https://cdn.jsdelivr.net/gh/Aurora0201/ImageStore@main/img/upgit_20230427_1682567530.png)
+
+### Crawler登录
+
++ 使用GET请求
++ 携带token
+
+后端实现：
+
++ 创建Crawler并初始化
++ 将Crawler注册到容器中
++ 调用getQuick方法获取登录二维码，返回二进制流到前端
