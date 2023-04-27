@@ -252,15 +252,18 @@
 
 每一个`Crawler`对象被创建出来后都会有属于自己的生命周期，如下图
 
-![crawler-lifecycle.drawio](/home/binjunkai/Pictures/crawler-lifecycle.drawio.png)
+![crawler-lifecycle.drawio](https://cdn.jsdelivr.net/gh/Aurora0201/ImageStore@main/img/upgit_20230427_1682567547.png)
 
 在此基础上，为了让用户更直观的了解当前`Crawler`的情况，我们设计了下面的几种状态
 
-![crawler-status.drawio](/home/binjunkai/Pictures/crawler-status.drawio.png)
+![crawler-status.drawio](https://cdn.jsdelivr.net/gh/Aurora0201/ImageStore@main/img/upgit_20230427_1682567476.png)
+
+状态转换的说明， 在用户首次使用或者使用后Crawler被回收时，此时Crawler的状态为**未创建**，当用户点击登录按钮后，后端会创建`Crawler`对象，此时进入**离线**状态，在用户扫描登录，并且登录成功后，会进入**闲置**状态，当用户点击深度搜索或者监听按钮时，就会进入对应的状态
 
 
 
-<p>状态转换的说明， 在用户首次使用或者使用后Crawler被回收时，此时Crawler的状态为<span style=" color:#BAC8D3 ">未创建</span></p>，当用户点击登录按钮时
+### 前端设计
 
+在理想的路线下应该是这样的
 
-
+![crawler-front-process.drawio](https://cdn.jsdelivr.net/gh/Aurora0201/ImageStore@main/img/upgit_20230427_1682567530.png)
