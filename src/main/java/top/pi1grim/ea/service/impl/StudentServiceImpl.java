@@ -8,6 +8,8 @@ import top.pi1grim.ea.service.StudentService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 /**
  * <p>
  * 学生表 服务实现类
@@ -25,6 +27,12 @@ public class StudentServiceImpl extends ServiceImpl<StudentMapper, Student> impl
     public Student getOneByNumberAndUserId(String number, Long id) {
         return studentMapper.selectOne(new LambdaQueryWrapper<Student>()
                 .eq(Student::getNumber, number)
+                .eq(Student::getUserId, id)
+                .eq(Student::getDeleted, false));
+    }
+
+    public List<Student> listByUserId(Long id) {
+        return studentMapper.selectList(new LambdaQueryWrapper<Student>()
                 .eq(Student::getUserId, id)
                 .eq(Student::getDeleted, false));
     }

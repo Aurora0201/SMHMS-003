@@ -3,6 +3,8 @@ package top.pi1grim.ea.service;
 import top.pi1grim.ea.entity.Student;
 import com.baomidou.mybatisplus.extension.service.IService;
 
+import java.util.List;
+
 /**
  * <p>
  * 学生表 服务类
@@ -13,4 +15,6 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface StudentService extends IService<Student> {
     Student getOneByNumberAndUserId(String number, Long id);
+
+    List<Student> listByUserId(Long id);
 }
