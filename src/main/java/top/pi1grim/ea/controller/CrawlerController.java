@@ -43,7 +43,7 @@ public class CrawlerController {
     public Response status(HttpServletRequest request) {
 
         Long id = tokenService.getId(request);
-
+        log.info("返回状态成功 ====> " + id);
         return Response.success(SuccessCode.GET_STATUS_SUCCESS, crawlerService.getStatus(id));
     }
 
@@ -53,7 +53,7 @@ public class CrawlerController {
 
         Long id = tokenService.getId(request);
         crawlerService.destory(id);
-        log.info("Crawer终止成功 ====> " + id);
+        log.info("Crawler终止成功 ====> " + id);
         return Response.success(SuccessCode.STOP_CRAWLER_SUCCESS, id);
     }
 }
