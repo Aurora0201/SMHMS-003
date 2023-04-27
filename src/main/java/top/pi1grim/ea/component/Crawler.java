@@ -136,6 +136,7 @@ public class Crawler {
             log.error("异常发生", e);
             Thread.currentThread().interrupt();
         }
+        log.info("获取二维码成功 ====> " + id);
         return quickFile;
     }
 
