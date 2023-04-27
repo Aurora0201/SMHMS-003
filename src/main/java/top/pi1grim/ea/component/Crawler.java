@@ -187,6 +187,20 @@ public class Crawler {
 
     }
 
+    public void scrollToBottom() {
+        try {
+
+            Thread.sleep(3000);
+            JavascriptExecutor executor = driver;
+            executor.executeScript("window.scrollTo(0, document.body.scrollHeight);");
+
+        } catch (InterruptedException e) {
+            log.error("线程错误 ====> " + id, e);
+            Thread.currentThread().interrupt();
+        } catch (Exception e) {
+            log.error("JS执行出错，公开数据不足 ====> " + id, e);
+        }
+    }
 
     public List<ResultDTO> deepSearch() {
         update();
@@ -203,7 +217,7 @@ public class Crawler {
             driver.get(URL + entry.getKey());
 
             try {
-                WebDriverWait wait10s = new WebDriverWait(driver, Duration.ofSeconds(10));
+                WebDriverWait wait10s = new WebDriverWait(driver, Duration.ofSeconds(20));
 
                 String beforeSrc;
                 String afterSrc;
@@ -214,22 +228,17 @@ public class Crawler {
                     driver.switchTo().defaultContent();
                     beforeSrc = driver.getPageSource();
 
-                    try {
-                        JavascriptExecutor executor = driver;
-                        executor.executeScript("window.scrollTo(0, document.body.scrollHeight);");
-                    } catch (JavascriptException e) {
-                        log.error("JS执行出错，公开数据不足 ====> " + id);
-                    }
+                    scrollToBottom();
 
+                    afterSrc = driver.getPageSource();
                     driver.switchTo().frame("QM_Feeds_Iframe");
                     li = wait10s.until(ExpectedConditions.presenceOfElementLocated(By.id("host_home_feeds")))
                             .findElements(By.className("f-single"));
 
-                    afterSrc = driver.getPageSource();
                 } while (li.size() < step && !beforeSrc.equals(afterSrc));
 
                 int currentStep = li.size() > step ? step : li.size();
-                log.info("当前最远步数 : " + currentStep + " ====> " + id);
+                log.info("当前好友" + entry.getValue().getNotes() + "最远步数 : " + currentStep + " ====> " + id);
 
                 for (int i = 0; i < currentStep; i++) {
                     WebElement item = li.get(i);
