@@ -20,7 +20,6 @@ import top.pi1grim.ea.type.ErrorCode;
 import top.pi1grim.ea.type.SuccessCode;
 
 import java.time.LocalDateTime;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
@@ -93,7 +92,7 @@ public class StudentController {
             EntityUtils.assign(dto, student);
             return dto;
         }).toList();
-
+        log.info("获取学生信息成功 ====> " + dtoList);
         return Response.success(SuccessCode.GET_STUDENT_SUCCESS, dtoList);
     }
 
