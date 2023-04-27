@@ -60,7 +60,7 @@ public class StudentController {
             throw new StudentException(ErrorCode.ILLEGAL_REQUEST_BODY, dto);
         }
 
-        Long id = tokenService.sessionGetObject(request, "id", Long.class);
+        Long id = tokenService.sessionGet(request, "id", Long.class);
 
         if (Objects.nonNull(getOneByNumberAndUserId(dto.getNumber(), id))) {
             throw new StudentException(ErrorCode.STUDENT_EXIST, dto);
@@ -83,7 +83,7 @@ public class StudentController {
     @Operation(summary = "获取学生API", description = "使用GET请求，成功返回学生的信息，成功代码2035")
     public Response getStudent(HttpServletRequest request) {
 
-        Long id = tokenService.sessionGetObject(request, "id", Long.class);
+        Long id = tokenService.sessionGet(request, "id", Long.class);
         List<Student> students = studentService.list(new LambdaQueryWrapper<Student>()
                 .eq(Student::getUserId, id)
                 .eq(Student::getDeleted, false));

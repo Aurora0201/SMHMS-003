@@ -108,7 +108,7 @@ public class UserController {
             throw new UserException(ErrorCode.ILLEGAL_REQUEST_BODY, dto);
         }
 
-        User user = tokenService.sessionGetObject(request, "user", User.class);
+        User user = tokenService.sessionGet(request, "user", User.class);
 
         EntityUtils.assign(user, dto);
         tokenService.sessionPut(request, "user", user);
@@ -122,7 +122,7 @@ public class UserController {
     @Operation(summary = "获取用户配置信息API", description = "使用GET请求，成功返回新配置，成功代码2010")
     public Response profile(HttpServletRequest request) {
 
-        User user = tokenService.sessionGetObject(request, "user", User.class);
+        User user = tokenService.sessionGet(request, "user", User.class);
 
         ProfileDTO dto = ProfileDTO.builder().build();
         EntityUtils.assign(dto, user);

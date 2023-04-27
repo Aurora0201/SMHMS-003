@@ -41,7 +41,7 @@ public class TokenServiceImpl implements TokenService {
         return session.getString(key);
     }
 
-    public <T> T sessionGetObject(HttpServletRequest request, String key, Class<T> type) {
+    public <T> T sessionGet(HttpServletRequest request, String key, Class<T> type) {
         JSONObject session = getSession(request);
         return session.getObject(key, type);
     }
