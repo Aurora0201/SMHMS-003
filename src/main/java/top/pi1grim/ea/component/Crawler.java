@@ -150,7 +150,7 @@ public class Crawler {
             throw new CrawlerException(ErrorCode.LOGIN_OVERTIME, id);
         }
         //登录成功
-        log.error("Crawler登录成功 ====> " + id);
+        log.info("Crawler登录成功 ====> " + id);
         status = CrawlerStatus.LEAVE_UNUSED;
 
     }
