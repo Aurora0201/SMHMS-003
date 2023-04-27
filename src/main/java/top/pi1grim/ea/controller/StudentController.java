@@ -1,6 +1,5 @@
 package top.pi1grim.ea.controller;
 
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -79,9 +78,7 @@ public class StudentController {
     public Response getStudent(HttpServletRequest request) {
 
         Long id = tokenService.getId(request);
-        List<Student> students = studentService.list(new LambdaQueryWrapper<Student>()
-                .eq(Student::getUserId, id)
-                .eq(Student::getDeleted, false));
+        List<Student> students = studentService.listByUserId(id);
 
         List<StudentDTO> dtoList = students.stream().map(student -> {
             StudentDTO dto = StudentDTO.builder().build();
