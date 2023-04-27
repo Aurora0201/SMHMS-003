@@ -1,6 +1,7 @@
 package top.pi1grim.ea.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.Resource;
@@ -107,5 +108,15 @@ public class StudentController {
         });
         log.info("修改学生信息成功 ====> " + students);
         return Response.success(SuccessCode.MOD_STUDENT_SUCCESS, null);
+    }
+
+    @DeleteMapping
+    public Response removeStudent(@RequestBody StudentDTOList students) {
+        List<StudentDTO> dtoList = students.getStudents();
+        dtoList.forEach(dto -> studentService.update(new LambdaUpdateWrapper<Student>()
+                .eq(Student::getId, dto.getId())
+                .set(Student::getDeleted, true)));
+        log.info("删除学生信息成功 ====> " + students);
+        return Response.success(SuccessCode.DEL_STUDENT_SUCCESS, null);
     }
 }
