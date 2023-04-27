@@ -142,7 +142,7 @@ public class Crawler {
     public File getQuick() {
         if (!status.equals(CrawlerStatus.OFFLINE)) {
             //只有离线状态才能调用这个方法
-            throw new CrawlerException(ErrorCode.WRONG_LOGIN_TIMING, status);
+            throw new CrawlerException(ErrorCode.WRONG_EXECUTE_TIMING, status);
         }
         driver.get(URL);
         File quickFile = null;
@@ -191,6 +191,9 @@ public class Crawler {
 
     public void deepSearch() {
         update();
+        if (!status.equals(CrawlerStatus.LEAVE_UNUSED) && !status.equals(CrawlerStatus.LISTEN)) {
+            throw new CrawlerException(ErrorCode.WRONG_EXECUTE_TIMING, status);
+        }
         for (Map.Entry<String, NumberDTO> entry : students.entrySet()) {
             driver.get(URL + entry.getKey());
 
