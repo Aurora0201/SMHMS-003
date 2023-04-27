@@ -52,7 +52,7 @@ public class CrawlerController {
     public Response abort(HttpServletRequest request) {
 
         Long id = tokenService.getId(request);
-        crawlerService.destory(id);
+        crawlerService.destroy(id);
         log.info("Crawler终止成功 ====> " + id);
         return Response.success(SuccessCode.STOP_CRAWLER_SUCCESS, id);
     }

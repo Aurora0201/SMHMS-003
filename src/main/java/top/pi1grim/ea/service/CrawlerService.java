@@ -11,5 +11,5 @@ public interface CrawlerService {
 
     CrawlerStatus getStatus(Long id);
 
-    void destory(Long id);
+    void destroy(Long id);
 }
