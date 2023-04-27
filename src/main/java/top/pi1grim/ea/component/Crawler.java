@@ -6,7 +6,9 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import top.pi1grim.ea.exception.CrawlerException;
 import top.pi1grim.ea.type.CrawlerStatus;
+import top.pi1grim.ea.type.ErrorCode;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -60,7 +62,7 @@ public class Crawler {
     }
 
     public Crawler init() {
-        status = CrawlerStatus.INITIAL;
+        status = CrawlerStatus.OFFLINE;
         driver = new ChromeDriver(OPTIONS);
         log.info("Crawler初始化完成 ====> " + this);
         return this;
@@ -104,8 +106,8 @@ public class Crawler {
     }
 
     public File getQuick() {
-        if (!status.equals(CrawlerStatus.INITIAL)) {
-            //只有初始化状态才能调用这个方法
+        if (!status.equals(CrawlerStatus.OFFLINE)) {
+            //只有离线状态才能调用这个方法
             //TODO:抛出异常
         }
         driver.get(URL);
@@ -136,6 +138,18 @@ public class Crawler {
         return quickFile;
     }
 
-    
+    public void checkLogin() {
+        try {
+            WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(30));
+            wait.until(ExpectedConditions.presenceOfElementLocated(By.className("head-info")));
+        } catch (RuntimeException e) {
+            destroy();
+            log.error("登录超时，销毁Crawler ====> " + id);
+            throw new CrawlerException(ErrorCode.LOGIN_OVERTIME, id);
+        }
+        //登录成功
+        status = CrawlerStatus.LEAVE_UNUSED;
+
+    }
 
 }

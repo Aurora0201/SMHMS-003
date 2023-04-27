@@ -5,4 +5,5 @@ import java.io.File;
 public interface CrawlerService {
     File getQuick(Long id);
 
+    void checkLogin(Long id);
 }

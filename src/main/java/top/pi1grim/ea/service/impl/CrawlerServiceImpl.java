@@ -1,6 +1,8 @@
 package top.pi1grim.ea.service.impl;
 
 import jakarta.annotation.Resource;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.stereotype.Service;
 import top.pi1grim.ea.component.Crawler;
 import top.pi1grim.ea.component.CrawlerFactory;
 import top.pi1grim.ea.entity.Student;
@@ -12,6 +14,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@Service
 public class CrawlerServiceImpl implements CrawlerService {
 
     @Resource
@@ -30,5 +33,11 @@ public class CrawlerServiceImpl implements CrawlerService {
 
         crawler.register(id,map);
         return crawler.getQuick();
+    }
+
+    @Async
+    public void checkLogin(Long id) {
+        Crawler crawler = Crawler.getCrawler(id);
+        crawler.checkLogin();
     }
 }
