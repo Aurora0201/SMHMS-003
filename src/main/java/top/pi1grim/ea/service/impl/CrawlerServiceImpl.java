@@ -32,7 +32,7 @@ public class CrawlerServiceImpl implements CrawlerService {
     public byte[] getQuick(Long id) {
         Crawler crawler = crawlerFactory.crawler();
 
-        List<Student> students = studentService.listByUserIdIgnoreSelected(id);
+        List<Student> students = studentService.listSelectedByUserId(id);
 
         Map<String, String> map = new HashMap<>();
         students.forEach(student -> map.put(student.getNumber(), student.getNotes()));
