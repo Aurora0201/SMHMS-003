@@ -6,8 +6,6 @@ import org.springframework.stereotype.Component;
 public class CrawlerFactory {
 
     public Crawler crawler() {
-        Crawler crawler = new Crawler();
-        crawler.init();
-        return crawler;
+        return new Crawler().init();
     }
 }
