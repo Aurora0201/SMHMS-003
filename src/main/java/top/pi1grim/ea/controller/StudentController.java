@@ -45,12 +45,7 @@ public class StudentController {
     @Resource
     private TokenService tokenService;
 
-    private Student getOneByNumberAndUserId(String number, Long id) {
-        return studentService.getOne(new LambdaQueryWrapper<Student>()
-                .eq(Student::getNumber, number)
-                .eq(Student::getUserId, id)
-                .eq(Student::getDeleted, false));
-    }
+
 
     @PostMapping
     @Operation(summary = "添加学生API", description = "使用POST请求，成功返回添加学生的信息，成功代码2030")
@@ -62,7 +57,7 @@ public class StudentController {
 
         Long id = tokenService.getId(request);
 
-        if (Objects.nonNull(getOneByNumberAndUserId(dto.getNumber(), id))) {
+        if (Objects.nonNull(studentService.getOneByNumberAndUserId(dto.getNumber(), id))) {
             throw new StudentException(ErrorCode.STUDENT_EXIST, dto);
         }
 
@@ -73,7 +68,7 @@ public class StudentController {
 
         studentService.save(student);
 
-        student = getOneByNumberAndUserId(dto.getNumber(), id);
+        student = studentService.getOneByNumberAndUserId(dto.getNumber(), id);
 
         log.info("保存学生信息成功 ====> " + student);
         return Response.success(SuccessCode.ADD_STUDENT_SUCCESS, student);
