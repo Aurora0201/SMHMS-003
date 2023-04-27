@@ -5,16 +5,11 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import top.pi1grim.ea.common.response.Response;
 import top.pi1grim.ea.service.CrawlerService;
 import top.pi1grim.ea.service.TokenService;
 import top.pi1grim.ea.type.SuccessCode;
-
-import java.io.File;
 
 @RestController
 @CrossOrigin
@@ -43,4 +38,31 @@ public class CrawlerController {
         return Response.success(SuccessCode.GET_QUICK_SUCCESS, quick);
     }
 
+    @GetMapping("/status")
+    @Operation(summary = "Crawler状态API", description = "使用GET请求，成功返回Crawler状态，成功代码2055")
+    public Response status(HttpServletRequest request) {
+
+        Long id = tokenService.getId(request);
+        log.info("返回状态成功 ====> " + id);
+        return Response.success(SuccessCode.GET_STATUS_SUCCESS, crawlerService.getStatus(id));
+    }
+
+    @DeleteMapping
+    @Operation(summary = "Crawler终止API", description = "使用DELETE请求，成功返回id，成功代码2060")
+    public Response abort(HttpServletRequest request) {
+
+        Long id = tokenService.getId(request);
+        crawlerService.destroy(id);
+        log.info("Crawler终止成功 ====> " + id);
+        return Response.success(SuccessCode.STOP_CRAWLER_SUCCESS, id);
+    }
+
+    @GetMapping("/deep")
+    @Operation(summary = "Crawler深度搜索API", description = "使用GET请求，成功启动返回id，成功代码2065")
+    public Response deepSearch(HttpServletRequest request) {
+        Long id = tokenService.getId(request);
+        crawlerService.deepSearch(id);
+        log.info("Crawler深度搜索启动成功 ====> " + id);
+        return Response.success(SuccessCode.START_DEEP_SUCCESS, id);
+    }
 }
