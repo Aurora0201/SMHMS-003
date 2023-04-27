@@ -2,11 +2,13 @@ package top.pi1grim.ea.component;
 
 import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.*;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import top.pi1grim.ea.dto.NumberDTO;
+import top.pi1grim.ea.dto.ResultDTO;
 import top.pi1grim.ea.exception.CrawlerException;
 import top.pi1grim.ea.type.CrawlerStatus;
 import top.pi1grim.ea.type.ErrorCode;
@@ -17,11 +19,8 @@ import java.io.File;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.Duration;
-import java.time.LocalDate;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.time.*;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
@@ -189,13 +188,16 @@ public class Crawler {
     }
 
 
-    public void deepSearch() {
+    public List<ResultDTO> deepSearch() {
         update();
         if (!status.equals(CrawlerStatus.LEAVE_UNUSED) && !status.equals(CrawlerStatus.LISTEN)) {
             throw new CrawlerException(ErrorCode.WRONG_EXECUTE_TIMING, status);
         }
 
         status = CrawlerStatus.DEEP_SEARCH;
+
+        List<ResultDTO> results = new ArrayList<>();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 
         for (Map.Entry<String, NumberDTO> entry : students.entrySet()) {
             driver.get(URL + entry.getKey());
@@ -224,29 +226,42 @@ public class Crawler {
 
                 for (int i = 0; i < (li.size() > step ? step : li.size()); i++) {
                     WebElement item = li.get(i);
-                    //时间提取
+
                     WebElement time = item.findElement(By.className("f-single-head"))
                             .findElement(By.className("user-info"))
                             .findElement(By.className("info-detail"))
                             .findElement(By.xpath("span"));
 
-                    System.out.println(time.getText());
-
-                    //内容提取
                     WebElement content = item.findElement(By.className("f-single-content"))
                             .findElement(By.className("f-item"))
                             .findElement(By.className("f-info"));
 
-                    System.out.println(content.getText());
+                    String format = format(time.getText());
+                    Date date = sdf.parse(format);
+                    Instant instant = date.toInstant();
+                    ZoneId zoneId = ZoneId.systemDefault();
 
+                    ResultDTO dto = new ResultDTO()
+                            .setUserId(id)
+                            .setStuId(entry.getValue().getId())
+                            .setNotes(entry.getValue().getNotes())
+                            .setNumber(entry.getKey())
+                            .setContent(content.getText())
+                            .setPostTime(instant.atZone(zoneId).toLocalDateTime());
+
+                    results.add(dto);
                 }
 
-            } catch (RuntimeException e) {
+            } catch (NoSuchElementException e) {
                 log.error("元素未找到 ====> " + id, e);
+            } catch (ParseException e) {
+                log.error("时间解析错误 ====> " + id, e);
             }
 
         }
         update();
         status = CrawlerStatus.LEAVE_UNUSED;
+
+        return results;
     }
 }
