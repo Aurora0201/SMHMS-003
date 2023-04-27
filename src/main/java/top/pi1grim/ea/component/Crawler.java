@@ -15,6 +15,7 @@ import java.io.File;
 import java.io.IOException;
 import java.time.Duration;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
@@ -38,7 +39,7 @@ public class Crawler {
 
     private Long lastUse;
 
-    private List<String> friends;
+    private Map<String, String> friends;
 
     static {
         OPTIONS = new ChromeOptions();
@@ -87,7 +88,7 @@ public class Crawler {
         return status;
     }
 
-    public void register(Long id, List<String> friends) {
+    public void register(Long id, Map<String, String> friends) {
         if (Objects.isNull(id)) {
             log.info("用户Id为空，注册失败，对象已销毁 ====> " + this);
             destroy();
