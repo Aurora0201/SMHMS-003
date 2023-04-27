@@ -60,10 +60,11 @@ public class Crawler {
         return CRAWLER_MAP.get(username);
     }
 
-    public void init() {
+    public Crawler init() {
         status = CrawlerStatus.INITIAL;
         driver = new ChromeDriver(OPTIONS);
         log.info("Crawler初始化完成 ====> " + this);
+        return this;
     }
 
     public void destroy() {
