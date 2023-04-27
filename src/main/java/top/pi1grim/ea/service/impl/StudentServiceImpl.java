@@ -37,4 +37,10 @@ public class StudentServiceImpl extends ServiceImpl<StudentMapper, Student> impl
                 .eq(Student::getDeleted, false));
     }
 
+    public List<Student> listSelectedByUserId(Long id) {
+        return studentMapper.selectList(new LambdaQueryWrapper<Student>()
+                .eq(Student::getUserId, id)
+                .eq(Student::getSelected, true)
+                .eq(Student::getDeleted, false));
+    }
 }
