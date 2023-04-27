@@ -5,8 +5,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+import top.pi1grim.ea.common.utils.EntityUtils;
 import top.pi1grim.ea.component.Crawler;
 import top.pi1grim.ea.component.CrawlerFactory;
+import top.pi1grim.ea.dto.NumberDTO;
 import top.pi1grim.ea.entity.Student;
 import top.pi1grim.ea.entity.User;
 import top.pi1grim.ea.service.CrawlerService;
@@ -39,8 +41,12 @@ public class CrawlerServiceImpl implements CrawlerService {
 
         List<Student> students = studentService.listSelectedByUserId(id);
 
-        Map<String, String> map = new HashMap<>();
-        students.forEach(student -> map.put(student.getNumber(), student.getNotes()));
+        Map<String, NumberDTO> map = new HashMap<>();
+        students.forEach(student -> {
+            NumberDTO dto = new NumberDTO();
+            EntityUtils.assign(dto, student);
+            map.put(student.getNumber(), dto);
+        });
 
         User user = userService.getById(id);
 
@@ -78,5 +84,6 @@ public class CrawlerServiceImpl implements CrawlerService {
     public void deepSearch(Long id) {
         Crawler crawler = Crawler.getCrawler(id);
         crawler.deepSearch();
+        //TODO:从这里发送到Python
     }
 }

@@ -6,6 +6,7 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import top.pi1grim.ea.dto.NumberDTO;
 import top.pi1grim.ea.exception.CrawlerException;
 import top.pi1grim.ea.type.CrawlerStatus;
 import top.pi1grim.ea.type.ErrorCode;
@@ -42,7 +43,7 @@ public class Crawler {
 
     private Long lastUse;
 
-    private Map<String, String> students;
+    private Map<String, NumberDTO> students;
 
     static {
         OPTIONS = new ChromeOptions();
@@ -92,7 +93,7 @@ public class Crawler {
         return status;
     }
 
-    public void register(Long id, Map<String, String> students, Byte step) {
+    public void register(Long id, Map<String, NumberDTO> students, Byte step) {
         if (Objects.isNull(id)) {
             log.info("用户Id为空，注册失败，对象已销毁 ====> " + this);
             destroy();
@@ -160,7 +161,7 @@ public class Crawler {
 
 
     public void deepSearch() {
-        for (Map.Entry<String, String> entry : students.entrySet()) {
+        for (Map.Entry<String, NumberDTO> entry : students.entrySet()) {
             driver.get(URL + entry.getKey());
 
             try {
