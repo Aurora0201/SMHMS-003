@@ -5,10 +5,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import top.pi1grim.ea.common.response.Response;
 import top.pi1grim.ea.service.CrawlerService;
 import top.pi1grim.ea.service.TokenService;
@@ -48,5 +45,15 @@ public class CrawlerController {
         Long id = tokenService.getId(request);
 
         return Response.success(SuccessCode.GET_STATUS_SUCCESS, crawlerService.getStatus(id));
+    }
+
+    @DeleteMapping
+    @Operation(summary = "Crawler终止API", description = "使用DELETE请求，成功返回id，成功代码2060")
+    public Response abort(HttpServletRequest request) {
+
+        Long id = tokenService.getId(request);
+        crawlerService.destory(id);
+        log.info("Crawer终止成功 ====> " + id);
+        return Response.success(SuccessCode.STOP_CRAWLER_SUCCESS, id);
     }
 }

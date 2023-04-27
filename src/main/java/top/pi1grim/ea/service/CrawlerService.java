@@ -10,4 +10,6 @@ public interface CrawlerService {
     void checkLogin(Long id);
 
     CrawlerStatus getStatus(Long id);
+
+    void destory(Long id);
 }

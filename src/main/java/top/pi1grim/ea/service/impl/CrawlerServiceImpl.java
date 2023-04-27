@@ -61,4 +61,9 @@ public class CrawlerServiceImpl implements CrawlerService {
         Crawler crawler = Crawler.getCrawler(id);
         return Objects.isNull(crawler) ? CrawlerStatus.NOT_CREATED : crawler.status();
     }
+
+    public void destory(Long id) {
+        Crawler crawler = Crawler.getCrawler(id);
+        crawler.destroy();
+    }
 }
