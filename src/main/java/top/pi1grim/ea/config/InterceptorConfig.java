@@ -24,8 +24,10 @@ public class InterceptorConfig implements WebMvcConfigurer {
     public void addInterceptors(InterceptorRegistry registry) {
 
         String[] includePath = new String[]{
-            "/api/v3/user/**",
-            "/api/v3/session/**"
+                "/api/v3/user/**",
+                "/api/v3/session/**",
+                "/api/v3/student/**",
+
         };
 
         String[] excludePath = new String[]{
