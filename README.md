@@ -239,3 +239,28 @@
   ]
 }
 ```
+
+
+
+## Crawler API
+
+在之前的2.0版本中，我们使用了工具类`OriginUtils`来获取数据，在测试阶段问题频出，同时存在致命性问题——无法同时为多位用户同时服务，这是设计时留下的巨大缺陷，工具类使用静态方法来提供服务，但是其与业务功能高度耦合，同时由于selenium包的特性，最终导致了2.0版本中的众多问题，所以在3.0版本中我们使用了`Crawler`组件来替换工具类，在这个版本中我们最大的改进就是可以同时为多个用户提供服务，我们使用`简单工厂`来生产`Crawler`对象，每一个用户都有属于自己的`Crawler`对象，在此之上，我们提供了更多的功能，比如垃圾回收，垃圾回收可以极大的减小服务器的内存压力，自动回收闲置的`Crawler`对象，为下一个用户的使用腾出空间，登录状态记录，`Crawler`不需要像工具类一样在切换模式时需要重复登录，也不需要使用QQ号来验证，只需要登录一次即可
+
+
+
+### 生命周期
+
+每一个`Crawler`对象被创建出来后都会有属于自己的生命周期，如下图
+
+![crawler-lifecycle.drawio](/home/binjunkai/Pictures/crawler-lifecycle.drawio.png)
+
+在此基础上，为了让用户更直观的了解当前`Crawler`的情况，我们设计了下面的几种状态
+
+![crawler-status.drawio](/home/binjunkai/Pictures/crawler-status.drawio.png)
+
+
+
+<p>状态转换的说明， 在用户首次使用或者使用后Crawler被回收时，此时Crawler的状态为<span style=" color:#BAC8D3 ">未创建</span></p>，当用户点击登录按钮时
+
+
+
