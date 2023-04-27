@@ -35,7 +35,7 @@ public class CrawlerController {
 
         Long id = tokenService.getId(request);
 
-        File quick = crawlerService.getQuick(id);
+        byte[] quick = crawlerService.getQuick(id);
         log.info("二维码获取完成 ====> " + id);
         crawlerService.checkLogin(id);
         log.info("登录检测开始 ====> " + id);
