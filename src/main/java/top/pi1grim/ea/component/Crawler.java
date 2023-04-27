@@ -15,7 +15,10 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.Duration;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -32,6 +35,11 @@ public class Crawler {
     private static final ConcurrentMap<Long, Crawler> CRAWLER_MAP = new ConcurrentHashMap<>();
 
     private static final String URL = "https://user.qzone.qq.com/";
+
+    private static final Map<String, Integer> DAY_TO_TIME = Map.of(
+            "今天", 0,
+            "前天", 2,
+            "昨天", 1);
 
     private CrawlerStatus status;
 
@@ -108,6 +116,27 @@ public class Crawler {
 
         CRAWLER_MAP.put(id, this);
         log.info("注册成功 ====> " + this);
+    }
+
+    public static String format(String t) throws ParseException {
+        t = t.replace("编辑于", "").trim();
+        SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+        SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat sdf3 = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat sdf4 = new SimpleDateFormat("MM-dd HH:mm");
+        if(t.startsWith("今天") || t.startsWith("昨天") || t.startsWith("前天")){
+            String chinaDate = t.substring(0,2);
+            t = t.replace(chinaDate, "").trim();
+            return sdf3.format(sdf2.parse(LocalDate.now().toString()).getTime() - (long) DAY_TO_TIME.get(chinaDate) * 24 * 60 * 60 * 1000) + " " + t;
+        }else if(t.matches("\\d{1,2}月\\d{1,2}日 \\d{1,2}:\\d{1,2}")){
+            SimpleDateFormat sdf = new SimpleDateFormat("M月d日 HH:mm");
+            return LocalDate.now().getYear()+ "-" + sdf4.format(sdf.parse(t));
+        } else if (t.matches("\\d{2}:\\d{2}")) {
+            return sdf3.format(sdf2.parse(LocalDate.now().toString()))+ " " + t;
+        } else{
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy年M月d日 HH:mm");
+            return sdf1.format(sdf.parse(t));
+        }
     }
 
     public File getQuick() {
