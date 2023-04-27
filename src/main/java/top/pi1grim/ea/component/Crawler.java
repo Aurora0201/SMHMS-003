@@ -190,6 +190,7 @@ public class Crawler {
 
 
     public void deepSearch() {
+        update();
         for (Map.Entry<String, NumberDTO> entry : students.entrySet()) {
             driver.get(URL + entry.getKey());
 
@@ -239,5 +240,6 @@ public class Crawler {
             }
 
         }
+        update();
     }
 }
