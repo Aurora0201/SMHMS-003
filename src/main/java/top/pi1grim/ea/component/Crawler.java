@@ -203,28 +203,35 @@ public class Crawler {
             driver.get(URL + entry.getKey());
 
             try {
-                driver.switchTo().frame("QM_Feeds_Iframe");
-                log.info("进入子页面成功 ====> " + id);
                 WebDriverWait wait10s = new WebDriverWait(driver, Duration.ofSeconds(10));
 
-                String beforeSrc = "";
-                String afterSrc = "";
+                String beforeSrc;
+                String afterSrc;
 
                 List<WebElement> li;
 
                 do {
+                    driver.switchTo().defaultContent();
                     beforeSrc = driver.getPageSource();
 
-                    JavascriptExecutor executor = driver;
-                    executor.executeScript("window.scrollTo(0, document.body.scrollHeight)");
+                    try {
+                        JavascriptExecutor executor = driver;
+                        executor.executeScript("window.scrollTo(0, document.body.scrollHeight);");
+                    } catch (JavascriptException e) {
+                        log.error("JS执行出错，公开数据不足 ====> " + id);
+                    }
 
+                    driver.switchTo().frame("QM_Feeds_Iframe");
                     li = wait10s.until(ExpectedConditions.presenceOfElementLocated(By.id("host_home_feeds")))
                             .findElements(By.className("f-single"));
 
                     afterSrc = driver.getPageSource();
                 } while (li.size() < step && !beforeSrc.equals(afterSrc));
 
-                for (int i = 0; i < (li.size() > step ? step : li.size()); i++) {
+                int currentStep = li.size() > step ? step : li.size();
+                log.info("当前最远步数 : " + currentStep + " ====> " + id);
+
+                for (int i = 0; i < currentStep; i++) {
                     WebElement item = li.get(i);
 
                     WebElement time = item.findElement(By.className("f-single-head"))
@@ -256,14 +263,14 @@ public class Crawler {
                 log.error("元素未找到 ====> " + id, e);
             } catch (ParseException e) {
                 log.error("时间解析错误 ====> " + id, e);
-            }finally {
+            }  finally {
                 status = CrawlerStatus.LEAVE_UNUSED;
             }
 
         }
         update();
         status = CrawlerStatus.LEAVE_UNUSED;
-
+        log.info("深度搜索结束 ====> " + id);
         return results;
     }
 }
