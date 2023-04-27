@@ -12,5 +12,5 @@ import com.baomidou.mybatisplus.extension.service.IService;
  * @since 2023-04-26
  */
 public interface StudentService extends IService<Student> {
-
+    Student getOneByNumberAndUserId(String number, Long id);
 }
