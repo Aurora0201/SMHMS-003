@@ -1,7 +1,6 @@
 package top.pi1grim.ea.component;
 
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang.StringUtils;
 import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
@@ -14,7 +13,6 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.time.Duration;
-import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
@@ -39,7 +37,7 @@ public class Crawler {
 
     private Long lastUse;
 
-    private Map<String, String> friends;
+    private Map<String, String> students;
 
     static {
         OPTIONS = new ChromeOptions();
@@ -88,14 +86,14 @@ public class Crawler {
         return status;
     }
 
-    public void register(Long id, Map<String, String> friends) {
+    public void register(Long id, Map<String, String> students) {
         if (Objects.isNull(id)) {
             log.info("用户Id为空，注册失败，对象已销毁 ====> " + this);
             destroy();
             //TODO ：抛出异常
         }
         this.id = id;
-        this.friends = friends;
+        this.students = students;
 
         if (CRAWLER_MAP.containsKey(id)) {
             CRAWLER_MAP.get(id).destroy();
