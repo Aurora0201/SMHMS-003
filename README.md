@@ -270,6 +270,8 @@
 
 ### Crawler登录
 
+创建并注册，然后激活登录程序
+
 + 使用GET请求
 + 携带token
 
@@ -284,6 +286,8 @@
 
 
 ### Crawler状态
+
+返回当前Crawler的状态
 
 + 使用GET请求
 + 携带token
@@ -300,5 +304,10 @@
 
 
 
+### Crawler终止
 
+强行停止当前的Crawler
+
++ 使用DELETE请求
++ 携带token
 
