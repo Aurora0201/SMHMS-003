@@ -26,6 +26,10 @@ public class TokenServiceImpl implements TokenService {
         return request.getHeader("token");
     }
 
+    public Long getId(HttpServletRequest request) {
+        return sessionGet(request, "id", Long.class);
+    }
+
     public void boundSession(HttpServletRequest request, JSONObject session) {
         template.boundValueOps(getToken(request)).set(session.toString(), RedisConstant.TOKEN_EXPIRE_TIME, TimeUnit.SECONDS);
     }
