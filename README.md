@@ -175,7 +175,31 @@
 
 **请求体**
 
-| 字段   | 要求   | 说明       | 类型   |
-| ------ | ------ | ---------- | ------ |
-| number | 不为空 | 好友QQ号   | String |
-| notes  | 不为空 | 好友备注名 | String |
+| 字段     | 要求                   | 说明                           | 类型    |
+| -------- | ---------------------- | ------------------------------ | ------- |
+| id       | 发送原始id，不允许修改 | 学生唯一标识符                 | Long    |
+| number   | 不为空                 | 好友QQ号                       | String  |
+| notes    | 不为空                 | 好友备注名                     | String  |
+| selected | false或true            | false -> 未选中 / true -> 选中 | Boolean |
+
+附：请求体格式
+
+```json
+{
+  "students": [
+    {
+      "id": 0,
+      "number": "string",
+      "notes": "string",
+      "selected": true
+    },
+	{
+      "id": 1,
+      "number": "string",
+      "notes": "string",
+      "selected": true
+	}
+  ]
+}
+```
+

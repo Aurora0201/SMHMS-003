@@ -11,6 +11,7 @@ import top.pi1grim.ea.common.response.Response;
 import top.pi1grim.ea.common.utils.EntityUtils;
 import top.pi1grim.ea.dto.ItemDTO;
 import top.pi1grim.ea.dto.StudentDTO;
+import top.pi1grim.ea.dto.StudentDTOList;
 import top.pi1grim.ea.entity.Student;
 import top.pi1grim.ea.exception.StudentException;
 import top.pi1grim.ea.service.StudentService;
@@ -19,6 +20,7 @@ import top.pi1grim.ea.type.ErrorCode;
 import top.pi1grim.ea.type.SuccessCode;
 
 import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
@@ -93,5 +95,18 @@ public class StudentController {
         }).toList();
 
         return Response.success(SuccessCode.GET_STUDENT_SUCCESS, dtoList);
+    }
+
+    @PutMapping
+    @Operation(summary = "更新学生API", description = "使用PUT请求，成功无返回值，成功代码2040")
+    public Response modifyStudent(@RequestBody StudentDTOList students) {
+        List<StudentDTO> dtoList = students.getStudents();
+        dtoList.forEach(dto -> {
+            Student stu = new Student();
+            EntityUtils.assign(stu, dto);
+            studentService.updateById(stu);
+        });
+        log.info("修改学生信息成功 ====> " + students);
+        return Response.success(SuccessCode.MOD_STUDENT_SUCCESS, null);
     }
 }
