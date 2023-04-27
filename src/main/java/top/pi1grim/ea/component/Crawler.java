@@ -92,7 +92,7 @@ public class Crawler {
         if (Objects.isNull(id)) {
             log.info("用户Id为空，注册失败，对象已销毁 ====> " + this);
             destroy();
-            //TODO ：抛出异常
+            throw new CrawlerException(ErrorCode.REGISTER_FAIL, null);
         }
         this.id = id;
         this.students = students;
