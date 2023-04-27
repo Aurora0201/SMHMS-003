@@ -256,6 +256,8 @@ public class Crawler {
                 log.error("元素未找到 ====> " + id, e);
             } catch (ParseException e) {
                 log.error("时间解析错误 ====> " + id, e);
+            }finally {
+                status = CrawlerStatus.LEAVE_UNUSED;
             }
 
         }
