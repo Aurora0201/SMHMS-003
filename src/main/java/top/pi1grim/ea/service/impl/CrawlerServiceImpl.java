@@ -9,6 +9,7 @@ import top.pi1grim.ea.common.utils.EntityUtils;
 import top.pi1grim.ea.component.Crawler;
 import top.pi1grim.ea.component.CrawlerFactory;
 import top.pi1grim.ea.dto.NumberDTO;
+import top.pi1grim.ea.dto.ResultDTO;
 import top.pi1grim.ea.entity.Student;
 import top.pi1grim.ea.entity.User;
 import top.pi1grim.ea.service.CrawlerService;
@@ -83,7 +84,7 @@ public class CrawlerServiceImpl implements CrawlerService {
     @Async
     public void deepSearch(Long id) {
         Crawler crawler = Crawler.getCrawler(id);
-        crawler.deepSearch();
+        List<ResultDTO> results = crawler.deepSearch();
         //TODO:从这里发送到Python
     }
 }
