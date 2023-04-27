@@ -26,7 +26,7 @@ public class Crawler {
 
     private static final ChromeOptions OPTIONS;
 
-    private static final ConcurrentMap<String, Crawler> CRAWLER_MAP = new ConcurrentHashMap<>();
+    private static final ConcurrentMap<Long, Crawler> CRAWLER_MAP = new ConcurrentHashMap<>();
 
     private static final String URL = "https://user.qzone.qq.com/";
 
@@ -34,7 +34,7 @@ public class Crawler {
 
     private ChromeDriver driver;
 
-    private String username;
+    private Long id;
 
     private Long lastUse;
 
@@ -52,12 +52,12 @@ public class Crawler {
         System.setProperty("webdriver.chrome.driver", "/usr/local/driver");
     }
 
-    public static boolean contains(String username) {
-        return CRAWLER_MAP.containsKey(username);
+    public static boolean contains(Long id) {
+        return CRAWLER_MAP.containsKey(id);
     }
 
-    public static Crawler getCrawler(String username) {
-        return CRAWLER_MAP.get(username);
+    public static Crawler getCrawler(Long id) {
+        return CRAWLER_MAP.get(id);
     }
 
     public Crawler init() {
@@ -71,8 +71,8 @@ public class Crawler {
         if (Objects.nonNull(driver)) {
             driver.quit();
         }
-        CRAWLER_MAP.remove(username);
-        log.info("Crawler销毁完成 ====> " + username);
+        CRAWLER_MAP.remove(id);
+        log.info("Crawler销毁完成 ====> " + id);
     }
 
     public void update() {
@@ -87,20 +87,20 @@ public class Crawler {
         return status;
     }
 
-    public void register(String username, List<String> friends) {
-        if (StringUtils.isEmpty(username)) {
-            log.info("用户名为空，注册失败，对象已销毁 ====> " + this);
+    public void register(Long id, List<String> friends) {
+        if (Objects.isNull(id)) {
+            log.info("用户Id为空，注册失败，对象已销毁 ====> " + this);
             destroy();
             //TODO ：抛出异常
         }
-        this.username = username;
+        this.id = id;
         this.friends = friends;
 
-        if (CRAWLER_MAP.containsKey(username)) {
-            CRAWLER_MAP.get(username).destroy();
+        if (CRAWLER_MAP.containsKey(id)) {
+            CRAWLER_MAP.get(id).destroy();
         }
 
-        CRAWLER_MAP.put(username, this);
+        CRAWLER_MAP.put(id, this);
         log.info("注册成功 ====> " + this);
     }
 
