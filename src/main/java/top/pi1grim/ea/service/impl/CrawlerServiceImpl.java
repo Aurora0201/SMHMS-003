@@ -10,13 +10,14 @@ import top.pi1grim.ea.component.CrawlerFactory;
 import top.pi1grim.ea.entity.Student;
 import top.pi1grim.ea.service.CrawlerService;
 import top.pi1grim.ea.service.StudentService;
+import top.pi1grim.ea.type.CrawlerStatus;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 @Service
 @Slf4j
@@ -54,5 +55,10 @@ public class CrawlerServiceImpl implements CrawlerService {
     public void checkLogin(Long id) {
         Crawler crawler = Crawler.getCrawler(id);
         crawler.checkLogin();
+    }
+
+    public CrawlerStatus getStatus(Long id) {
+        Crawler crawler = Crawler.getCrawler(id);
+        return Objects.isNull(crawler) ? CrawlerStatus.NOT_CREATED : crawler.status();
     }
 }

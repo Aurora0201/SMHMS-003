@@ -17,6 +17,7 @@ public enum SuccessCode implements GenericEnum{
     MOD_STUDENT_SUCCESS(2040, "更新学生信息成功"),
     DEL_STUDENT_SUCCESS(2045, "删除学生信息成功"),
     GET_QUICK_SUCCESS(2050, "获取登录二维码成功"),
+    GET_STATUS_SUCCESS(2055, "获取状态成功"),
 
     ;
     private final int code;

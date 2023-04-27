@@ -14,8 +14,6 @@ import top.pi1grim.ea.service.CrawlerService;
 import top.pi1grim.ea.service.TokenService;
 import top.pi1grim.ea.type.SuccessCode;
 
-import java.io.File;
-
 @RestController
 @CrossOrigin
 @RequestMapping("/api/v3/crawler")
@@ -43,4 +41,12 @@ public class CrawlerController {
         return Response.success(SuccessCode.GET_QUICK_SUCCESS, quick);
     }
 
+    @GetMapping("/status")
+    @Operation(summary = "Crawler状态API", description = "使用GET请求，成功返回Crawler状态，成功代码2055")
+    public Response status(HttpServletRequest request) {
+
+        Long id = tokenService.getId(request);
+
+        return Response.success(SuccessCode.GET_STATUS_SUCCESS, crawlerService.getStatus(id));
+    }
 }
