@@ -221,7 +221,7 @@ public class Crawler {
             wait.until(ExpectedConditions.presenceOfElementLocated(By.className("head-info")));
         } catch (RuntimeException e) {
             destroy();
-            log.error("登录超时，销毁Crawler ====> " + id);
+            log.error("登录超时或者使用了新的Crawler，销毁Crawler ====> " + id);
             throw new CrawlerException(ErrorCode.LOGIN_OVERTIME, id);
         }
         //登录成功
