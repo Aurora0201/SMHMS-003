@@ -71,10 +71,6 @@ public class Crawler {
         System.setProperty("webdriver.chrome.driver", "/usr/local/driver");
     }
 
-    public static boolean contains(Long id) {
-        return CRAWLER_MAP.containsKey(id);
-    }
-
     public static Crawler getCrawler(Long id) {
         return CRAWLER_MAP.get(id);
     }
