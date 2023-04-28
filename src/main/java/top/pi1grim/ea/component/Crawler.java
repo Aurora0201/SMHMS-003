@@ -126,7 +126,8 @@ public class Crawler {
         if(t.startsWith("今天") || t.startsWith("昨天") || t.startsWith("前天")){
             String chinaDate = t.substring(0,2);
             t = t.replace(chinaDate, "").trim();
-            return sdf3.format(sdf2.parse(LocalDate.now().toString()).getTime() - (long) DAY_TO_TIME.get(chinaDate) * 24 * 60 * 60 * 1000) + " " + t;
+            return sdf3.format(sdf2.parse(LocalDate.now().toString()).getTime()
+                    - (long) DAY_TO_TIME.get(chinaDate) * 24 * 60 * 60 * 1000) + " " + t;
         }else if(t.matches("\\d{1,2}月\\d{1,2}日 \\d{1,2}:\\d{1,2}")){
             SimpleDateFormat sdf = new SimpleDateFormat("M月d日 HH:mm");
             return LocalDate.now().getYear()+ "-" + sdf4.format(sdf.parse(t));
@@ -146,21 +147,26 @@ public class Crawler {
         driver.get(URL);
         File quickFile = null;
         try {
-            Thread.sleep(3000);
+            Thread.sleep(2000);
             WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
             WebElement iframe = wait.until(ExpectedConditions.presenceOfElementLocated(By.id("login_frame")));
+
             int iframeX = iframe.getLocation().getX();
             int iframeY = iframe.getLocation().getY();
+
             driver.switchTo().frame(iframe);
             quickFile = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
             BufferedImage image = ImageIO.read(quickFile);
             WebElement quick = wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("/html/body/div[1]/div[4]/div[8]/div/span/img")));
+
             int left = iframeX + quick.getLocation().getX();
             int top = iframeY + quick.getLocation().getY();
             int right = quick.getSize().getWidth();
             int bottom = quick.getSize().getHeight();
+
             BufferedImage img = image.getSubimage(left,top,right,bottom);
             ImageIO.write(img, "png", quickFile);
+
             driver.switchTo().defaultContent();
         } catch (IOException e) {
             log.error("异常发生",e);
