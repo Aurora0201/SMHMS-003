@@ -66,22 +66,25 @@ public class CrawlerServiceImpl implements CrawlerService {
     }
 
     public byte[] getQuick(Long id) {
-        Crawler crawler = Crawler.getInstance();
+        Crawler crawler;
+        if (Crawler.contains(id)) {
+            crawler = Crawler.getCrawler(id);
+        } else {
+            crawler = Crawler.getInstance();
+            List<Student> students = studentService.listSelectedByUserId(id);
+            Map<String, NumberDTO> map = new HashMap<>();
 
-        List<Student> students = studentService.listSelectedByUserId(id);
+            students.forEach(student -> {
+                NumberDTO dto = new NumberDTO();
+                EntityUtils.assign(dto, student);
+                map.put(student.getQqNumber(), dto);
+            });
 
-        Map<String, NumberDTO> map = new HashMap<>();
-        students.forEach(student -> {
-            NumberDTO dto = new NumberDTO();
-            EntityUtils.assign(dto, student);
-            map.put(student.getQqNumber(), dto);
-        });
+            User user = userService.getById(id);
+            crawler.register(id, map, user.getStep());
+        }
 
-        User user = userService.getById(id);
-
-        crawler.register(id, map, user.getStep());
         File quickFile = crawler.getQuick();
-
         byte[] quickBytes = null;
 
         try {
