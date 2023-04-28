@@ -184,6 +184,7 @@ public class Crawler {
     }
 
     public File getQuick() {
+        update();
         if (!status.equals(CrawlerStatus.OFFLINE)) {
             //只有离线状态才能调用这个方法
             throw new CrawlerException(ErrorCode.WRONG_EXECUTE_TIMING, status);
@@ -220,6 +221,7 @@ public class Crawler {
             Thread.currentThread().interrupt();
         }
         log.info("获取二维码成功 ====> " + id);
+        update();
         return quickFile;
     }
 
