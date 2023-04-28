@@ -7,8 +7,11 @@ import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 import top.pi1grim.ea.common.response.Response;
+import top.pi1grim.ea.exception.CrawlerException;
 import top.pi1grim.ea.service.CrawlerService;
 import top.pi1grim.ea.service.TokenService;
+import top.pi1grim.ea.type.CrawlerStatus;
+import top.pi1grim.ea.type.ErrorCode;
 import top.pi1grim.ea.type.SuccessCode;
 
 @RestController
@@ -64,5 +67,19 @@ public class CrawlerController {
         crawlerService.deepSearch(id);
         log.info("Crawler深度搜索启动成功 ====> " + id);
         return Response.success(SuccessCode.START_DEEP_SUCCESS, id);
+    }
+
+    @GetMapping("/listen")
+    public Response listen(HttpServletRequest request) {
+        Long id = tokenService.getId(request);
+
+        CrawlerStatus status = crawlerService.getStatus(id);
+        if(!status.equals(CrawlerStatus.LEAVE_UNUSED)){
+            throw new CrawlerException(ErrorCode.WRONG_EXECUTE_TIMING, status);
+        }
+
+        crawlerService.listen(id);
+
+        return Response.success(SuccessCode.START_LISTEN_SUCCESS, id);
     }
 }
