@@ -1,5 +1,7 @@
 package top.pi1grim.ea.service.impl;
 
+import jakarta.annotation.Resource;
+import top.pi1grim.ea.dto.ResultDTO;
 import top.pi1grim.ea.entity.Result;
 import top.pi1grim.ea.mapper.ResultMapper;
 import top.pi1grim.ea.service.ResultService;
@@ -16,5 +18,12 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class ResultServiceImpl extends ServiceImpl<ResultMapper, Result> implements ResultService {
+
+    @Resource
+    private ResultMapper resultMapper;
+
+    public void insResult(ResultDTO dto) {
+        resultMapper.insResult(dto);
+    }
 
 }

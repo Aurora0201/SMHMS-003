@@ -1,5 +1,6 @@
 package top.pi1grim.ea.mapper;
 
+import top.pi1grim.ea.dto.ResultDTO;
 import top.pi1grim.ea.entity.Result;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
@@ -12,5 +13,5 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  * @since 2023-04-28
  */
 public interface ResultMapper extends BaseMapper<Result> {
-
+    void insResult(ResultDTO dto);
 }
