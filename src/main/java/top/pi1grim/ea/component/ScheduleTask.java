@@ -22,4 +22,11 @@ public class ScheduleTask {
         }
     }
 
+    @Scheduled(cron = "0 0/10 * * * ?")
+    public void executeRecycle() {
+        for (Map.Entry<Long, Crawler> entry : Crawler.getCrawlerMap().entrySet()) {
+            Long id = entry.getKey();
+            crawlerService.recycle(id);
+        }
+    }
 }

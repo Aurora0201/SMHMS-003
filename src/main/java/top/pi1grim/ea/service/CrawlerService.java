@@ -20,4 +20,6 @@ public interface CrawlerService {
     void executeListen(Long id);
 
     void updateAvatar(Long id);
+
+    void recycle(Long id);
 }

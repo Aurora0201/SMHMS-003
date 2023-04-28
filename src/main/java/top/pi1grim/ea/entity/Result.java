@@ -1,8 +1,8 @@
 package top.pi1grim.ea.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import lombok.Getter;
 import lombok.Setter;
@@ -10,7 +10,7 @@ import lombok.experimental.Accessors;
 
 /**
  * <p>
- * 学生表
+ * 结果表
  * </p>
  *
  * @author Bin JunKai
@@ -19,7 +19,7 @@ import lombok.experimental.Accessors;
 @Getter
 @Setter
 @Accessors(chain = true)
-public class Student {
+public class Result {
 
     /**
      * 主键id
@@ -28,12 +28,17 @@ public class Student {
     private Long id;
 
     /**
-     * 用户
+     * 用户id
      */
     private Long userId;
 
     /**
-     * 好友QQ号
+     * 学生id
+     */
+    private Long stuId;
+
+    /**
+     * 学生QQ号
      */
     private String qqNumber;
 
@@ -43,24 +48,27 @@ public class Student {
     private String notes;
 
     /**
-     * 是否选中;0 -> 未选中  / 1-> 选中
+     * 动态内容
      */
-    @TableField("is_selected")
-    private Boolean selected;
+    private String content;
 
     /**
-     * 是否删除;0 -> 未删除  / 1-> 删除
+     * 动态发送时间
      */
-    @TableField("is_deleted")
-    private Boolean deleted;
+    private LocalDateTime postTime;
 
     /**
-     * 创建时间
+     * 置信度
      */
-    private LocalDateTime createTime;
+    private BigDecimal score;
 
     /**
-     * 更新时间
+     * 心理健康状况
      */
-    private LocalDateTime updateTime;
+    private String status;
+
+    /**
+     * 用以区分监听还是深度;false -> 深度 true -> 监听
+     */
+    private Boolean dataType;
 }

@@ -294,13 +294,14 @@
 
 **返回的状态就是上面的五种状态**，在数据层面的表现形式为下表
 
-| 状态         | 说明     |
-| ------------ | -------- |
-| NOT_CREATED  | 未创建   |
-| OFFLINE      | 离线     |
-| LEAVE_UNUSED | 闲置     |
-| DEEP_SEARCH  | 深度搜索 |
-| LISTEN       | 监听     |
+| 状态          | 说明     |
+| ------------- | -------- |
+| NOT_CREATED   | 未创建   |
+| OFFLINE       | 离线     |
+| LEAVE_UNUSED  | 闲置     |
+| DEEP_SEARCH   | 深度搜索 |
+| LISTEN        | 监听     |
+| UPDATE_AVATAR | 更新头像 |
 
 
 
@@ -324,6 +325,8 @@
 
 前端应根据Websocket进行信息的更新
 
+
+
 ### Crawler实时监听
 
 将Crawler状态设置为实时监听模式，剩下的步骤将会由定时任务自动执行
@@ -335,5 +338,14 @@
 
 前端应根据Websocket进行信息的更新
 
+
+
 ### Crawler头像更新
+
+更新头像的数据表
+
++ 使用GET请求
++ 携带token
+
+执行成功后返回id，数据库表会自动更新完成
 

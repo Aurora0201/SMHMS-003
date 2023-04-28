@@ -55,6 +55,10 @@ public class Crawler {
 
     private Map<String, NumberDTO> students;
 
+    private Set<String> filter;
+
+    private String currentQqNumber;
+
     static {
         OPTIONS = new ChromeOptions();
         OPTIONS.addArguments(
@@ -87,6 +91,7 @@ public class Crawler {
         status = CrawlerStatus.OFFLINE;
         driver = new ChromeDriver(OPTIONS);
         timestamp = Instant.now();
+        filter = new HashSet<>();
         update();
         log.info("Crawler初始化完成 ====> " + this);
         return this;
@@ -111,8 +116,11 @@ public class Crawler {
         lastUse = System.currentTimeMillis();
     }
 
-    public void recovery() {
-        //TODO：超时回收
+    public void recycle() {
+        if (System.currentTimeMillis() - lastUse > 10 * 60 * 1000) {
+            log.info("Crawler已被回收 ====> " + id);
+            destroy();
+        }
     }
 
     public CrawlerStatus status() {
@@ -219,6 +227,12 @@ public class Crawler {
         try {
             WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(30));
             wait.until(ExpectedConditions.presenceOfElementLocated(By.className("head-info")));
+
+            currentQqNumber = wait.until(ExpectedConditions.presenceOfElementLocated(By.id("QM_OwnerInfo_Icon")))
+                    .getAttribute("src").split("/")[4];
+
+            log.info("当前的QQ号 " + currentQqNumber + " ====> " + id);
+
         } catch (RuntimeException e) {
             destroy();
             log.error("登录超时或者使用了新的Crawler，销毁Crawler ====> " + id);
@@ -227,7 +241,6 @@ public class Crawler {
         //登录成功
         log.info("Crawler登录成功 ====> " + id);
         status = CrawlerStatus.LEAVE_UNUSED;
-
     }
 
     public void scrollToBottom() {
@@ -295,10 +308,10 @@ public class Crawler {
                             .setUserId(id)
                             .setStuId(entry.getValue().getId())
                             .setNotes(entry.getValue().getNotes())
-                            .setNumber(entry.getKey())
+                            .setQqNumber(entry.getKey())
                             .setContent(content.getText())
                             .setPostTime(formatToLocalDateTime(time.getText()))
-                            .setType(false);
+                            .setDataType(false);
 
                     results.add(dto);
                 }
@@ -322,7 +335,8 @@ public class Crawler {
     }
 
     public ResultDTO scan() {
-        driver.get(URL);
+        update();
+        driver.get(URL + currentQqNumber);
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
 
         WebElement userPto = wait.until(ExpectedConditions.presenceOfElementLocated(By.className("user-pto")));
@@ -341,20 +355,25 @@ public class Crawler {
         String number = url[url.length - 1];
 
         NumberDTO student = students.get(number);
-        if (Objects.isNull(student)) {
+        if (Objects.isNull(student) || filter.contains(content)) {
             return null;
         }
+
+        filter.add(content);
+        log.info("侦测到目标 ====> " + id);
+
+        update();
 
         return new ResultDTO().setUserId(id)
                 .setStuId(student.getId())
                 .setNotes(student.getNotes())
-                .setNumber(number)
+                .setQqNumber(number)
                 .setContent(content)
                 .setPostTime(dateTime)
-                .setType(true);
+                .setDataType(true);
     }
 
-    public void updateAvatar() {
+    public List<AvatarDTO> updateAvatar() {
 
         update();
         status = CrawlerStatus.UPDATE_AVATAR;
@@ -373,10 +392,10 @@ public class Crawler {
 
             avatars.add(avatarDto);
         }
-        System.out.println(avatars);
 
         update();
         status = CrawlerStatus.LEAVE_UNUSED;
-
+        log.info("头像采集完成 ====> " + id);
+        return avatars;
     }
 }
