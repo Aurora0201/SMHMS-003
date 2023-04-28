@@ -343,7 +343,7 @@ public class Crawler {
     public void updateAvatar() {
 
         update();
-
+        status = CrawlerStatus.UPDATE_AVATAR;
         List<AvatarDTO> avatars = new ArrayList<>();
 
         for (Map.Entry<String, NumberDTO> entry : students.entrySet()) {
@@ -362,5 +362,7 @@ public class Crawler {
         System.out.println(avatars);
 
         update();
+        status = CrawlerStatus.LEAVE_UNUSED;
+
     }
 }
