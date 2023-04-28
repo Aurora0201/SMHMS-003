@@ -26,7 +26,7 @@ public class StudentServiceImpl extends ServiceImpl<StudentMapper, Student> impl
 
     public Student getOneByNumberAndUserId(String number, Long id) {
         return studentMapper.selectOne(new LambdaQueryWrapper<Student>()
-                .eq(Student::getNumber, number)
+                .eq(Student::getQqNumber, number)
                 .eq(Student::getUserId, id)
                 .eq(Student::getDeleted, false));
     }

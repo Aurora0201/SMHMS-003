@@ -20,7 +20,7 @@ public class Generator {
                 })
                 .strategyConfig(builder -> {
                     builder
-//                            .addInclude("result")
+//                            .addInclude("student")
                             .entityBuilder()
 //                            .enableFileOverride()
                             .enableLombok()
