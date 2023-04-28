@@ -4,12 +4,8 @@ import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
-import top.pi1grim.ea.dto.ResultDTO;
 import top.pi1grim.ea.service.CrawlerService;
-import top.pi1grim.ea.type.CrawlerStatus;
-
 import java.util.Map;
-import java.util.Objects;
 
 @Component
 @Slf4j
