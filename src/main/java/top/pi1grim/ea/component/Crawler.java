@@ -77,6 +77,10 @@ public class Crawler {
         return CRAWLER_MAP;
     }
 
+    public static Crawler getInstance() {
+        return new Crawler().init();
+    }
+
     public Crawler init() {
         status = CrawlerStatus.OFFLINE;
         driver = new ChromeDriver(OPTIONS);

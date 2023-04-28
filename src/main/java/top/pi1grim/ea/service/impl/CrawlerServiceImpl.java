@@ -7,7 +7,6 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import top.pi1grim.ea.common.utils.EntityUtils;
 import top.pi1grim.ea.component.Crawler;
-import top.pi1grim.ea.component.CrawlerFactory;
 import top.pi1grim.ea.dto.NumberDTO;
 import top.pi1grim.ea.dto.ResultDTO;
 import top.pi1grim.ea.entity.Student;
@@ -29,16 +28,13 @@ import java.util.Objects;
 public class CrawlerServiceImpl implements CrawlerService {
 
     @Resource
-    private CrawlerFactory crawlerFactory;
-
-    @Resource
     private StudentService studentService;
 
     @Resource
     private UserService userService;
 
     public byte[] getQuick(Long id) {
-        Crawler crawler = crawlerFactory.crawler();
+        Crawler crawler = Crawler.getInstance();
 
         List<Student> students = studentService.listSelectedByUserId(id);
 
