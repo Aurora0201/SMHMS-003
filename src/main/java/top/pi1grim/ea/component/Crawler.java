@@ -161,8 +161,8 @@ public class Crawler {
     public LocalDateTime formatToLocalDateTime(String time) {
 
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-        Instant instant = null;
-        ZoneId zoneId = null;
+        Instant instant;
+        ZoneId zoneId;
 
         try {
             String format = format(time);
