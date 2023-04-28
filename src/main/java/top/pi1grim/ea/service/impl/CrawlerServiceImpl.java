@@ -87,4 +87,10 @@ public class CrawlerServiceImpl implements CrawlerService {
         List<ResultDTO> results = crawler.deepSearch();
         //TODO:从这里发送到Python
     }
+
+    @Async
+    public void listen(Long id) {
+        Crawler crawler = Crawler.getCrawler(id);
+        crawler.listen();
+    }
 }

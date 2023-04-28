@@ -288,4 +288,9 @@ public class Crawler {
         log.info("深度搜索结束 ====> " + id);
         return results;
     }
+
+    public void listen() {
+        status = CrawlerStatus.LISTEN;
+        log.info("进入监听模式 ====> " + id);
+    }
 }
