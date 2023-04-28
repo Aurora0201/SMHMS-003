@@ -28,7 +28,7 @@ public class WebSocketServer {
     /**
      * 连接建立成功调用的方法*/
     @OnOpen
-    public void onOpen(Session session,@PathParam("id") Long id) {
+    public void onOpen(Session session, @PathParam("id") Long id) {
         this.session = session;
         this.id = id;
         if(WEB_SOCKET_MAP.containsKey(id)){
@@ -67,7 +67,7 @@ public class WebSocketServer {
      * @param error
      */
     @OnError
-    public void onError(RuntimeException error) {
+    public void onError(Throwable error) {
         log.error("用户错误: " + id + ",原因: " + error.getMessage(), error);
     }
     /**
