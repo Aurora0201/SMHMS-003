@@ -40,6 +40,9 @@ public class CrawlerServiceImpl implements CrawlerService {
     private ResultService resultService;
 
     @Resource
+    private SmsService smsService;
+
+    @Resource
     private RestTemplate template;
 
     private static final String URL = "http://api.pi1grim.top/ea/api/v3/python/analysis";
@@ -132,7 +135,23 @@ public class CrawlerServiceImpl implements CrawlerService {
             ResultDTO result = crawler.scan();
             if(Objects.isNull(result))return;
 
-            //TODO:发送到Python
+            String response = template.postForObject(URL, result, String.class);
+            List<ResultDTOWrapper> dtoList = JSON.parseArray(response, ResultDTOWrapper.class);
+            if (Objects.nonNull(dtoList)) {
+                List<ResultDTO> unwrap = unwrap(dtoList);
+                ResultDTO dto = unwrap.get(0);
+
+                if (!dto.getStatus().equals("良好")) {
+                    User user = userService.getById(id);
+                    String stu = "[" + dto.getQqNumber() + "]" + "(" + dto.getNotes() + ")";
+                    smsService.sendShortMessage(stu, dto.getStatus(), user.getPhone());
+                }
+
+                resultService.insResult(dto);
+                log.info("监听数据插入完成 ====> " + id);
+            }
+
+
         }
     }
 

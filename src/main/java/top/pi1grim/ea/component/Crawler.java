@@ -55,6 +55,10 @@ public class Crawler {
 
     private Map<String, NumberDTO> students;
 
+    private Set<String> filter;
+
+    private String currentQqNumber;
+
     static {
         OPTIONS = new ChromeOptions();
         OPTIONS.addArguments(
@@ -87,6 +91,7 @@ public class Crawler {
         status = CrawlerStatus.OFFLINE;
         driver = new ChromeDriver(OPTIONS);
         timestamp = Instant.now();
+        filter = new HashSet<>();
         update();
         log.info("Crawler初始化完成 ====> " + this);
         return this;
@@ -222,6 +227,12 @@ public class Crawler {
         try {
             WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(30));
             wait.until(ExpectedConditions.presenceOfElementLocated(By.className("head-info")));
+
+            currentQqNumber = wait.until(ExpectedConditions.presenceOfElementLocated(By.id("QM_OwnerInfo_Icon")))
+                    .getAttribute("src").split("/")[4];
+
+            log.info("当前的QQ号 " + currentQqNumber + " ====> " + id);
+
         } catch (RuntimeException e) {
             destroy();
             log.error("登录超时或者使用了新的Crawler，销毁Crawler ====> " + id);
@@ -230,7 +241,6 @@ public class Crawler {
         //登录成功
         log.info("Crawler登录成功 ====> " + id);
         status = CrawlerStatus.LEAVE_UNUSED;
-
     }
 
     public void scrollToBottom() {
@@ -326,7 +336,7 @@ public class Crawler {
 
     public ResultDTO scan() {
         update();
-        driver.get(URL);
+        driver.get(URL + currentQqNumber);
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
 
         WebElement userPto = wait.until(ExpectedConditions.presenceOfElementLocated(By.className("user-pto")));
@@ -345,9 +355,12 @@ public class Crawler {
         String number = url[url.length - 1];
 
         NumberDTO student = students.get(number);
-        if (Objects.isNull(student)) {
+        if (Objects.isNull(student) || filter.contains(content)) {
             return null;
         }
+
+        filter.add(content);
+        log.info("侦测到目标 ====> " + id);
 
         update();
 
