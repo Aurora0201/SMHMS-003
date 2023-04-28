@@ -51,6 +51,8 @@ public class Crawler {
 
     private Long lastUse;
 
+    private Instant timestamp;
+
     private Map<String, NumberDTO> students;
 
     static {
@@ -84,17 +86,25 @@ public class Crawler {
     public Crawler init() {
         status = CrawlerStatus.OFFLINE;
         driver = new ChromeDriver(OPTIONS);
+        timestamp = Instant.now();
         update();
         log.info("Crawler初始化完成 ====> " + this);
         return this;
+    }
+
+    public Instant getTimestamp() {
+        return timestamp;
     }
 
     public void destroy() {
         if (Objects.nonNull(driver)) {
             driver.quit();
         }
-        CRAWLER_MAP.remove(id);
-        log.info("Crawler销毁完成 ====> " + id);
+        if (CRAWLER_MAP.containsKey(id) &&
+                CRAWLER_MAP.get(id).getTimestamp().equals(timestamp)) {
+            CRAWLER_MAP.remove(id);
+            log.info("Crawler销毁完成 ====> " + id + " : " + this);
+        }
     }
 
     public void update() {
