@@ -65,7 +65,7 @@ public class Crawler {
                 "--remote-allow-origins=*",
                 "--disable-gpu",
                 "--no-sandbox"
-//                ,"--headless"
+//                ,"--headless" TODO:推送时移除
                 );
         OPTIONS.setPageLoadStrategy(PageLoadStrategy.EAGER);
         System.setProperty("webdriver.chrome.driver", "/usr/local/driver");
