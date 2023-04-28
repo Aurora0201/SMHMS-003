@@ -325,6 +325,7 @@ public class Crawler {
     }
 
     public ResultDTO scan() {
+        update();
         driver.get(URL);
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
 
@@ -347,6 +348,8 @@ public class Crawler {
         if (Objects.isNull(student)) {
             return null;
         }
+
+        update();
 
         return new ResultDTO().setUserId(id)
                 .setStuId(student.getId())
