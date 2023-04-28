@@ -94,14 +94,14 @@ public class CrawlerServiceImpl implements CrawlerService {
         crawler.listen();
     }
 
-    public void executeListen() {
-        for (Map.Entry<Long, Crawler> entry : Crawler.getCrawlerMap().entrySet()) {
-            Crawler crawler = entry.getValue();
-            if (crawler.status().equals(CrawlerStatus.LISTEN)) {
-                ResultDTO result = crawler.scan();
-                if(Objects.isNull(result))continue;
-                //TODO:发送到Python
-            }
+    @Async
+    public void executeListen(Long id) {
+        Crawler crawler = Crawler.getCrawler(id);
+        if (crawler.status().equals(CrawlerStatus.LISTEN)) {
+            ResultDTO result = crawler.scan();
+            if(Objects.isNull(result))return;
+
+            //TODO:发送到Python
         }
     }
 }
