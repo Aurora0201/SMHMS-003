@@ -93,4 +93,15 @@ public class CrawlerServiceImpl implements CrawlerService {
         Crawler crawler = Crawler.getCrawler(id);
         crawler.listen();
     }
+
+    public void executeListen() {
+        for (Map.Entry<Long, Crawler> entry : Crawler.getCrawlerMap().entrySet()) {
+            Crawler crawler = entry.getValue();
+            if (crawler.status().equals(CrawlerStatus.LISTEN)) {
+                ResultDTO result = crawler.scan();
+                if(Objects.isNull(result))continue;
+                //TODO:发送到Python
+            }
+        }
+    }
 }
