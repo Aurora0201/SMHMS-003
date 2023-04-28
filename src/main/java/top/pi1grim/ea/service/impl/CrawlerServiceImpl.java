@@ -112,4 +112,10 @@ public class CrawlerServiceImpl implements CrawlerService {
         List<AvatarDTO> avatars = crawler.updateAvatar();
         avatarService.insAvatar(avatars);
     }
+
+    @Async
+    public void recycle(Long id) {
+        Crawler crawler = Crawler.getCrawler(id);
+        crawler.recycle();
+    }
 }

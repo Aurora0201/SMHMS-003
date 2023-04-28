@@ -111,8 +111,11 @@ public class Crawler {
         lastUse = System.currentTimeMillis();
     }
 
-    public void recovery() {
-        //TODO：超时回收
+    public void recycle() {
+        if (System.currentTimeMillis() - lastUse > 10 * 60 * 1000) {
+            log.info("Crawler已被回收 ====> " + id);
+            destroy();
+        }
     }
 
     public CrawlerStatus status() {
