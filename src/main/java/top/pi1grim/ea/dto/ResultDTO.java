@@ -15,7 +15,7 @@ public class ResultDTO {
     private String notes;
     private String content;
     private LocalDateTime postTime;
-    private Boolean type;
+    private Boolean dataType;
     private BigDecimal score;
     private String status;
 }

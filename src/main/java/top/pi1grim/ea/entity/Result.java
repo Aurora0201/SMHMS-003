@@ -70,5 +70,5 @@ public class Result {
     /**
      * 用以区分监听还是深度;false -> 深度 true -> 监听
      */
-    private Boolean type;
+    private Boolean dataType;
 }

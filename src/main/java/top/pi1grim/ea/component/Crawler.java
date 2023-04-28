@@ -301,7 +301,7 @@ public class Crawler {
                             .setQqNumber(entry.getKey())
                             .setContent(content.getText())
                             .setPostTime(formatToLocalDateTime(time.getText()))
-                            .setType(false);
+                            .setDataType(false);
 
                     results.add(dto);
                 }
@@ -357,7 +357,7 @@ public class Crawler {
                 .setQqNumber(number)
                 .setContent(content)
                 .setPostTime(dateTime)
-                .setType(true);
+                .setDataType(true);
     }
 
     public List<AvatarDTO> updateAvatar() {
