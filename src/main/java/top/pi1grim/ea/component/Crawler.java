@@ -7,6 +7,7 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import top.pi1grim.ea.dto.AvatarDTO;
 import top.pi1grim.ea.dto.NumberDTO;
 import top.pi1grim.ea.dto.ResultDTO;
 import top.pi1grim.ea.exception.CrawlerException;
@@ -337,5 +338,29 @@ public class Crawler {
                 .setContent(content)
                 .setPostTime(dateTime)
                 .setType(true);
+    }
+
+    public void updateAvatar() {
+
+        update();
+
+        List<AvatarDTO> avatars = new ArrayList<>();
+
+        for (Map.Entry<String, NumberDTO> entry : students.entrySet()) {
+            String url = URL + entry.getKey();
+            NumberDTO stu = entry.getValue();
+            driver.get(url);
+            WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+            String avatar = wait.until(ExpectedConditions.presenceOfElementLocated(By.id("QM_OwnerInfo_Icon")))
+                    .getAttribute("src");
+
+            AvatarDTO avatarDto = new AvatarDTO().setStuId(stu.getId())
+                    .setAvatar(avatar);
+
+            avatars.add(avatarDto);
+        }
+        System.out.println(avatars);
+
+        update();
     }
 }

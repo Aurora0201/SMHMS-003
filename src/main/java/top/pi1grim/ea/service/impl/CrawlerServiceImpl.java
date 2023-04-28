@@ -104,4 +104,10 @@ public class CrawlerServiceImpl implements CrawlerService {
             //TODO:发送到Python
         }
     }
+
+    @Async
+    public void updateAvatar(Long id) {
+        Crawler crawler = Crawler.getCrawler(id);
+        crawler.updateAvatar();
+    }
 }
