@@ -7,10 +7,12 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import top.pi1grim.ea.common.utils.EntityUtils;
 import top.pi1grim.ea.component.Crawler;
+import top.pi1grim.ea.dto.AvatarDTO;
 import top.pi1grim.ea.dto.NumberDTO;
 import top.pi1grim.ea.dto.ResultDTO;
 import top.pi1grim.ea.entity.Student;
 import top.pi1grim.ea.entity.User;
+import top.pi1grim.ea.service.AvatarService;
 import top.pi1grim.ea.service.CrawlerService;
 import top.pi1grim.ea.service.StudentService;
 import top.pi1grim.ea.service.UserService;
@@ -32,6 +34,9 @@ public class CrawlerServiceImpl implements CrawlerService {
 
     @Resource
     private UserService userService;
+
+    @Resource
+    private AvatarService avatarService;
 
     public byte[] getQuick(Long id) {
         Crawler crawler = Crawler.getInstance();
@@ -104,6 +109,7 @@ public class CrawlerServiceImpl implements CrawlerService {
     @Async
     public void updateAvatar(Long id) {
         Crawler crawler = Crawler.getCrawler(id);
-        crawler.updateAvatar();
+        List<AvatarDTO> avatars = crawler.updateAvatar();
+        avatarService.insAvatar(avatars);
     }
 }

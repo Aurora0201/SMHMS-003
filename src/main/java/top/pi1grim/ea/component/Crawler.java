@@ -354,7 +354,7 @@ public class Crawler {
                 .setType(true);
     }
 
-    public void updateAvatar() {
+    public List<AvatarDTO> updateAvatar() {
 
         update();
         status = CrawlerStatus.UPDATE_AVATAR;
@@ -373,10 +373,10 @@ public class Crawler {
 
             avatars.add(avatarDto);
         }
-        System.out.println(avatars);
 
         update();
         status = CrawlerStatus.LEAVE_UNUSED;
-
+        log.info("头像采集完成 ====> " + id);
+        return avatars;
     }
 }
