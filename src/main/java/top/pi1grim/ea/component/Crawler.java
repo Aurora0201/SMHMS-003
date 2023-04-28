@@ -157,7 +157,8 @@ public class Crawler {
             driver.switchTo().frame(iframe);
             quickFile = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
             BufferedImage image = ImageIO.read(quickFile);
-            WebElement quick = wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("/html/body/div[1]/div[4]/div[8]/div/span/img")));
+            WebElement quick = wait.until(ExpectedConditions.presenceOfElementLocated(
+                    By.xpath("/html/body/div[1]/div[4]/div[8]/div/span/img")));
 
             int left = iframeX + quick.getLocation().getX();
             int top = iframeY + quick.getLocation().getY();
@@ -210,9 +211,6 @@ public class Crawler {
 
     public List<ResultDTO> deepSearch() {
         update();
-        if (!status.equals(CrawlerStatus.LEAVE_UNUSED) && !status.equals(CrawlerStatus.LISTEN)) {
-            throw new CrawlerException(ErrorCode.WRONG_EXECUTE_TIMING, status);
-        }
 
         status = CrawlerStatus.DEEP_SEARCH;
 
