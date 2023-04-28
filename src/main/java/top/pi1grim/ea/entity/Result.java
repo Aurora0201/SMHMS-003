@@ -40,7 +40,7 @@ public class Result {
     /**
      * 学生QQ号
      */
-    private String number;
+    private String qqNumber;
 
     /**
      * 备注名
