@@ -3,6 +3,7 @@ package top.pi1grim.ea.dto;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Data
@@ -15,4 +16,6 @@ public class ResultDTO {
     private String content;
     private LocalDateTime postTime;
     private Boolean type;
+    private BigDecimal score;
+    private String status;
 }
