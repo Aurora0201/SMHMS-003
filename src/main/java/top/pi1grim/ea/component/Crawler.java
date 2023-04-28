@@ -75,6 +75,10 @@ public class Crawler {
         return CRAWLER_MAP.get(id);
     }
 
+    public static boolean contains(Long id) {
+        return CRAWLER_MAP.containsKey(id);
+    }
+
     public static ConcurrentMap<Long, Crawler> getCrawlerMap() {
         return CRAWLER_MAP;
     }
