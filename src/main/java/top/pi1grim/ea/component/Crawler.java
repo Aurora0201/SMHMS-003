@@ -236,8 +236,7 @@ public class Crawler {
             log.info("当前的QQ号 " + currentQqNumber + " ====> " + id);
 
         } catch (RuntimeException e) {
-            destroy();
-            log.error("登录超时或者使用了新的Crawler，销毁Crawler ====> " + id);
+            log.error("登录超时 ====> " + id);
             throw new CrawlerException(ErrorCode.LOGIN_OVERTIME, id);
         }
         //登录成功
