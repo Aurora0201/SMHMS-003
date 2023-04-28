@@ -16,4 +16,6 @@ public interface CrawlerService {
     void deepSearch(Long id);
 
     void listen(Long id);
+
+    void executeListen(Long id);
 }

@@ -72,6 +72,10 @@ public class Crawler {
         return CRAWLER_MAP.get(id);
     }
 
+    public static ConcurrentMap<Long, Crawler> getCrawlerMap() {
+        return CRAWLER_MAP;
+    }
+
     public Crawler init() {
         status = CrawlerStatus.OFFLINE;
         driver = new ChromeDriver(OPTIONS);
@@ -137,6 +141,23 @@ public class Crawler {
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy年M月d日 HH:mm");
             return sdf1.format(sdf.parse(t));
         }
+    }
+
+    public LocalDateTime formatToLocalDateTime(String time) {
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+        Instant instant = null;
+        ZoneId zoneId = null;
+
+        try {
+            String format = format(time);
+            Date date = sdf.parse(format);
+            instant = date.toInstant();
+            zoneId = ZoneId.systemDefault();
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
+        }
+        return instant.atZone(zoneId).toLocalDateTime();
     }
 
     public File getQuick() {
@@ -215,7 +236,6 @@ public class Crawler {
         status = CrawlerStatus.DEEP_SEARCH;
 
         List<ResultDTO> results = new ArrayList<>();
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 
         for (Map.Entry<String, NumberDTO> entry : students.entrySet()) {
             driver.get(URL + entry.getKey());
@@ -256,27 +276,21 @@ public class Crawler {
                             .findElement(By.className("f-item"))
                             .findElement(By.className("f-info"));
 
-                    String format = format(time.getText());
-                    Date date = sdf.parse(format);
-                    Instant instant = date.toInstant();
-                    ZoneId zoneId = ZoneId.systemDefault();
-
                     ResultDTO dto = new ResultDTO()
                             .setUserId(id)
                             .setStuId(entry.getValue().getId())
                             .setNotes(entry.getValue().getNotes())
                             .setNumber(entry.getKey())
                             .setContent(content.getText())
-                            .setPostTime(instant.atZone(zoneId).toLocalDateTime());
+                            .setPostTime(formatToLocalDateTime(time.getText()))
+                            .setType(false);
 
                     results.add(dto);
                 }
 
             } catch (NoSuchElementException e) {
                 log.error("元素未找到 ====> " + id, e);
-            } catch (ParseException e) {
-                log.error("时间解析错误 ====> " + id, e);
-            }  finally {
+            } finally {
                 status = CrawlerStatus.LEAVE_UNUSED;
             }
 
@@ -290,5 +304,38 @@ public class Crawler {
     public void listen() {
         status = CrawlerStatus.LISTEN;
         log.info("进入监听模式 ====> " + id);
+    }
+
+    public ResultDTO scan() {
+        driver.get(URL);
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+
+        WebElement userPto = wait.until(ExpectedConditions.presenceOfElementLocated(By.className("user-pto")));
+
+        String content = wait.until(ExpectedConditions.presenceOfElementLocated(By.className("f-info")))
+                .getText();
+
+        String time = wait.until(ExpectedConditions.presenceOfElementLocated(By.className("info-detail")))
+                .findElement(By.xpath("span"))
+                .getText();
+        LocalDateTime dateTime = formatToLocalDateTime(time);
+
+        String[] url = userPto.findElement(By.xpath("a"))
+                .getAttribute("href")
+                .split("/");
+        String number = url[url.length - 1];
+
+        NumberDTO student = students.get(number);
+        if (Objects.isNull(student)) {
+            return null;
+        }
+
+        return new ResultDTO().setUserId(id)
+                .setStuId(student.getId())
+                .setNotes(student.getNotes())
+                .setNumber(number)
+                .setContent(content)
+                .setPostTime(dateTime)
+                .setType(true);
     }
 }

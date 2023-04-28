@@ -14,4 +14,5 @@ public class ResultDTO {
     private String notes;
     private String content;
     private LocalDateTime postTime;
+    private Boolean type;
 }
