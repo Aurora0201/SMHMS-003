@@ -10,7 +10,8 @@ public enum CrawlerStatus implements GenericEnum{
     OFFLINE(15, "离线"),
     LEAVE_UNUSED(20, "闲置"),
     DEEP_SEARCH(25, "深度搜索"),
-    LISTEN(30, "监听")
+    LISTEN(30, "监听"),
+    UPDATE_AVATAR(35, "更新头像"),
     ;
     private final int code;
     private final String message;

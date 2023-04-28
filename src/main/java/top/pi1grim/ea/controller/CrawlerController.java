@@ -89,4 +89,17 @@ public class CrawlerController {
         log.info("Crawler实时监听启动成功 ====> " + id);
         return Response.success(SuccessCode.START_LISTEN_SUCCESS, id);
     }
+
+    @GetMapping("/avatar")
+    @Operation(summary = "Crawler更新头像API", description = "使用GET请求，成功启动返回id，成功代码2075")
+    public Response avatar(HttpServletRequest request) {
+        Long id = tokenService.getId(request);
+        CrawlerStatus status = crawlerService.getStatus(id);
+        if(!status.equals(CrawlerStatus.LEAVE_UNUSED)){
+            throw new CrawlerException(ErrorCode.WRONG_EXECUTE_TIMING, status);
+        }
+
+        crawlerService.updateAvatar(id);
+        return Response.success(SuccessCode.UPDATE_AVATAR_SUCCESS, id);
+    }
 }
