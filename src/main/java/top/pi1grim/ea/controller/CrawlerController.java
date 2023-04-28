@@ -76,6 +76,7 @@ public class CrawlerController {
     }
 
     @GetMapping("/listen")
+    @Operation(summary = "Crawler实时监听API", description = "使用GET请求，成功启动返回id，成功代码2070")
     public Response listen(HttpServletRequest request) {
         Long id = tokenService.getId(request);
 
