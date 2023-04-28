@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 public class ResultDTO {
     private Long userId;
     private Long stuId;
-    private String number;
+    private String qqNumber;
     private String notes;
     private String content;
     private LocalDateTime postTime;

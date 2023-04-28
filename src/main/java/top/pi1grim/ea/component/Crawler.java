@@ -298,7 +298,7 @@ public class Crawler {
                             .setUserId(id)
                             .setStuId(entry.getValue().getId())
                             .setNotes(entry.getValue().getNotes())
-                            .setNumber(entry.getKey())
+                            .setQqNumber(entry.getKey())
                             .setContent(content.getText())
                             .setPostTime(formatToLocalDateTime(time.getText()))
                             .setType(false);
@@ -354,7 +354,7 @@ public class Crawler {
         return new ResultDTO().setUserId(id)
                 .setStuId(student.getId())
                 .setNotes(student.getNotes())
-                .setNumber(number)
+                .setQqNumber(number)
                 .setContent(content)
                 .setPostTime(dateTime)
                 .setType(true);
