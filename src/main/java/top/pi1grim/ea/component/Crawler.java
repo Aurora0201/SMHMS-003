@@ -13,6 +13,7 @@ import top.pi1grim.ea.dto.ResultDTO;
 import top.pi1grim.ea.exception.CrawlerException;
 import top.pi1grim.ea.type.CrawlerStatus;
 import top.pi1grim.ea.type.ErrorCode;
+import top.pi1grim.ea.type.WebSocketCode;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -237,10 +238,12 @@ public class Crawler {
 
         } catch (RuntimeException e) {
             log.error("登录超时 ====> " + id);
+            WebSocketServer.sendInfo(WebSocketCode.UPDATE_STATUS, id);
             throw new CrawlerException(ErrorCode.LOGIN_OVERTIME, id);
         }
         //登录成功
         log.info("Crawler登录成功 ====> " + id);
+        WebSocketServer.sendInfo(WebSocketCode.UPDATE_STATUS, id);
         status = CrawlerStatus.LEAVE_UNUSED;
     }
 
