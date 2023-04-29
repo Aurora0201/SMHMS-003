@@ -155,6 +155,7 @@ public class CrawlerServiceImpl implements CrawlerService {
 
                 resultService.insResult(dto);
                 log.info("监听数据插入完成 ====> " + id);
+                WebSocketServer.sendInfo(WebSocketCode.UPDATE_DATA, id);
             }
 
 
