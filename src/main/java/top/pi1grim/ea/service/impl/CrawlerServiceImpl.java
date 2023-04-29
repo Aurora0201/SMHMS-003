@@ -168,6 +168,7 @@ public class CrawlerServiceImpl implements CrawlerService {
         Crawler crawler = Crawler.getCrawler(id);
         List<AvatarDTO> avatars = crawler.updateAvatar();
         avatarService.insAvatar(avatars);
+        WebSocketServer.sendInfo(Response.success(WebSocketCode.UPDATE_AVATAR, id), id);
     }
 
     @Async
