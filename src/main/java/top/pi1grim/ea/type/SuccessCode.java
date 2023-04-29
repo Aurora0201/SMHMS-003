@@ -24,6 +24,7 @@ public enum SuccessCode implements GenericEnum{
     UPDATE_AVATAR_SUCCESS(2075, "更新头像启动成功"),
     RETURN_ID_SUCCESS(2080, "返回用户id成功"),
     RETURN_AVATAR_SUCCESS(2085, "返回学生头像成功"),
+    RETURN_RESULT_SUCCESS(2090, "返回结果集成功"),
 
     ;
     private final int code;
