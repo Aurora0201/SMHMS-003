@@ -1,10 +1,13 @@
 package top.pi1grim.ea.component;
 
+import com.alibaba.fastjson2.JSON;
 import jakarta.websocket.*;
 import jakarta.websocket.server.PathParam;
 import jakarta.websocket.server.ServerEndpoint;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import top.pi1grim.ea.common.response.Response;
+import top.pi1grim.ea.type.WebSocketCode;
 
 import java.io.IOException;
 import java.util.Objects;
@@ -45,7 +48,7 @@ public class WebSocketServer {
         log.info("用户连接: " + id + ",当前在线人数为: " + getOnlineCount());
 
         try {
-            sendMessage("INFO"); //TODO
+            sendMessage(Response.success(WebSocketCode.CONNECT_DONE, id));
         } catch (IOException e) {
             log.info("用户:" + id + ",网络异常");
         }
@@ -63,9 +66,7 @@ public class WebSocketServer {
         log.info("用户退出: " + id + ",当前在线人数为: " + getOnlineCount());
     }
 
-    /**
-     * @param error
-     */
+
     @OnError
     public void onError(Throwable error) {
         log.error("用户错误: " + id + ",原因: " + error.getMessage(), error);
@@ -73,15 +74,15 @@ public class WebSocketServer {
     /**
      * 实现服务器主动推送
      */
-    public void sendMessage(String message) throws IOException {
-        this.session.getBasicRemote().sendText(message);
+    public void sendMessage(Object message) throws IOException {
+        this.session.getBasicRemote().sendText(JSON.toJSONString(message));
     }
 
 
     /**
      * 发送自定义消息
      */
-    public static void sendInfo(String message, Long id) throws IOException {
+    public static void sendInfo(Object message, Long id) throws IOException {
 
         if (Objects.nonNull(id) && WEB_SOCKET_MAP.containsKey(id)) {
             WEB_SOCKET_MAP.get(id).sendMessage(message);
