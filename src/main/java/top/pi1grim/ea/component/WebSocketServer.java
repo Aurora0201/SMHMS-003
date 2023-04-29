@@ -82,13 +82,17 @@ public class WebSocketServer {
     /**
      * 发送自定义消息
      */
-    public static void sendInfo(Object message, Long id) throws IOException {
-
-        if (Objects.nonNull(id) && WEB_SOCKET_MAP.containsKey(id)) {
-            WEB_SOCKET_MAP.get(id).sendMessage(message);
-        } else {
-            log.info("用户" + id + ",不在线！");
+    public static void sendInfo(Object message, Long id){
+        try{
+            if (Objects.nonNull(id) && WEB_SOCKET_MAP.containsKey(id)) {
+                WEB_SOCKET_MAP.get(id).sendMessage(message);
+            } else {
+                log.info("用户" + id + ",不在线！");
+            }
+        } catch (IOException e) {
+            log.error("websocket异常", e);
         }
+
     }
 
 
