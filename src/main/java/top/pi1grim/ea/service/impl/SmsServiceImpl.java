@@ -30,7 +30,7 @@ public class SmsServiceImpl implements SmsService {
             req.setPhoneNumberSet(numberList);
 
             SendSmsResponse res = client.SendSms(req);
-            log.info(SendSmsResponse.toJsonString(res));
+            log.info("短信已发送 ====> " + SendSmsResponse.toJsonString(res));
 
         } catch (Exception e) {
             log.error("interrupt occur", e);
