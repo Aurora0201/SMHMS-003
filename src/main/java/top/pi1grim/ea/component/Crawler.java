@@ -336,6 +336,7 @@ public class Crawler {
 
     public void listen() {
         status = CrawlerStatus.LISTEN;
+        WebSocketServer.sendInfo(WebSocketCode.UPDATE_STATUS, id);
         log.info("进入监听模式 ====> " + id);
     }
 
