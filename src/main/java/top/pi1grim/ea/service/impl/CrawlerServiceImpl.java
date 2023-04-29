@@ -9,11 +9,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import top.pi1grim.ea.common.utils.EntityUtils;
 import top.pi1grim.ea.component.Crawler;
+import top.pi1grim.ea.component.WebSocketServer;
 import top.pi1grim.ea.dto.*;
 import top.pi1grim.ea.entity.Student;
 import top.pi1grim.ea.entity.User;
 import top.pi1grim.ea.service.*;
 import top.pi1grim.ea.type.CrawlerStatus;
+import top.pi1grim.ea.type.WebSocketCode;
 
 import java.io.File;
 import java.io.IOException;
@@ -114,6 +116,7 @@ public class CrawlerServiceImpl implements CrawlerService {
 
     @Async
     public void deepSearch(Long id) {
+        WebSocketServer.sendInfo(WebSocketCode.UPDATE_STATUS, id);
         Crawler crawler = Crawler.getCrawler(id);
         List<ResultDTO> result = crawler.deepSearch();
         String response = template.postForObject(URL, result, String.class);
@@ -123,6 +126,8 @@ public class CrawlerServiceImpl implements CrawlerService {
             unwrap.forEach(resultService::insResult);
         }
         log.info("深度数据插入完成 ====> " + id);
+        WebSocketServer.sendInfo(WebSocketCode.UPDATE_STATUS, id);
+        WebSocketServer.sendInfo(WebSocketCode.UPDATE_DATA, id);
     }
 
     @Async
