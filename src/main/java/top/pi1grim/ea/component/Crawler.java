@@ -266,7 +266,7 @@ public class Crawler {
         update();
 
         status = CrawlerStatus.DEEP_SEARCH;
-
+        WebSocketServer.sendInfo(WebSocketCode.UPDATE_STATUS, id);
         List<ResultDTO> results = new ArrayList<>();
 
         for (Map.Entry<String, NumberDTO> entry : students.entrySet()) {
@@ -329,6 +329,7 @@ public class Crawler {
         }
         update();
         status = CrawlerStatus.LEAVE_UNUSED;
+        WebSocketServer.sendInfo(WebSocketCode.UPDATE_STATUS, id);
         log.info("深度搜索结束 ====> " + id);
         return results;
     }
