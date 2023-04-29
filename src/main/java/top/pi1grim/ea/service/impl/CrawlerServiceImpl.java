@@ -7,6 +7,7 @@ import org.apache.commons.io.FileUtils;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+import top.pi1grim.ea.common.response.Response;
 import top.pi1grim.ea.common.utils.EntityUtils;
 import top.pi1grim.ea.component.Crawler;
 import top.pi1grim.ea.component.WebSocketServer;
@@ -125,7 +126,7 @@ public class CrawlerServiceImpl implements CrawlerService {
             unwrap.forEach(resultService::insResult);
         }
         log.info("深度数据插入完成 ====> " + id);
-        WebSocketServer.sendInfo(WebSocketCode.UPDATE_DATA, id);
+        WebSocketServer.sendInfo(Response.success(WebSocketCode.UPDATE_DATA, id), id);
     }
 
     @Async
@@ -155,7 +156,7 @@ public class CrawlerServiceImpl implements CrawlerService {
 
                 resultService.insResult(dto);
                 log.info("监听数据插入完成 ====> " + id);
-                WebSocketServer.sendInfo(WebSocketCode.UPDATE_DATA, id);
+                WebSocketServer.sendInfo(Response.success(WebSocketCode.UPDATE_DATA, id), id);
             }
 
 
