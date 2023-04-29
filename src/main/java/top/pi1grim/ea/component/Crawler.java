@@ -240,7 +240,7 @@ public class Crawler {
         } catch (RuntimeException e) {
             log.error("登录超时 ====> " + id);
             WebSocketServer.sendInfo(Response.success(WebSocketCode.UPDATE_STATUS, id), id);
-            throw new CrawlerException(ErrorCode.LOGIN_OVERTIME, id);
+            return;
         }
         //登录成功
         log.info("Crawler登录成功 ====> " + id);
@@ -261,6 +261,19 @@ public class Crawler {
         } catch (Exception e) {
             log.error("JS执行出错，公开数据不足 ====> " + id, e);
         }
+    }
+
+    private WebElement getContent(WebElement item) {
+        WebElement content = null;
+        try {
+            content = item.findElement(By.className("f-single-content"))
+                    .findElement(By.className("f-item"))
+                    .findElement(By.className("f-info"));
+        } catch (Exception e) {
+            log.info("无文字动态，跳过 ====> " + id);
+        }
+
+        return content;
     }
 
     public List<ResultDTO> deepSearch() {
@@ -305,22 +318,21 @@ public class Crawler {
                 for (int i = 0; i < currentStep; i++) {
                     WebElement item = li.get(i);
 
-                    WebElement time = item.findElement(By.className("f-single-head"))
+                    String time = item.findElement(By.className("f-single-head"))
                             .findElement(By.className("user-info"))
                             .findElement(By.className("info-detail"))
-                            .findElement(By.xpath("span"));
-
-                    WebElement content = item.findElement(By.className("f-single-content"))
-                            .findElement(By.className("f-item"))
-                            .findElement(By.className("f-info"));
+                            .findElement(By.xpath("span"))
+                            .getText();
+                    WebElement contentEle = getContent(item);
+                    String content = contentEle == null ? "" : contentEle.getText();
 
                     ResultDTO dto = new ResultDTO()
                             .setUserId(id)
                             .setStuId(entry.getValue().getId())
                             .setNotes(entry.getValue().getNotes())
                             .setQqNumber(entry.getKey())
-                            .setContent(content.getText())
-                            .setPostTime(formatToLocalDateTime(time.getText()))
+                            .setContent(content)
+                            .setPostTime(formatToLocalDateTime(time))
                             .setDataType(false);
 
                     results.add(dto);
@@ -353,8 +365,15 @@ public class Crawler {
 
         WebElement userPto = wait.until(ExpectedConditions.presenceOfElementLocated(By.className("user-pto")));
 
-        String content = wait.until(ExpectedConditions.presenceOfElementLocated(By.className("f-info")))
-                .getText();
+        String content = null;
+
+        try {
+            content = wait.until(ExpectedConditions.presenceOfElementLocated(By.className("f-info")))
+                    .getText();
+        } catch (Exception e) {
+            log.info("无文字动态，跳过 ====> " + id);
+            return null;
+        }
 
         String time = wait.until(ExpectedConditions.presenceOfElementLocated(By.className("info-detail")))
                 .findElement(By.xpath("span"))
