@@ -389,6 +389,7 @@ public class Crawler {
 
         update();
         status = CrawlerStatus.UPDATE_AVATAR;
+        WebSocketServer.sendInfo(Response.success(WebSocketCode.UPDATE_STATUS, id), id);
         List<AvatarDTO> avatars = new ArrayList<>();
 
         for (Map.Entry<String, NumberDTO> entry : students.entrySet()) {
@@ -407,6 +408,7 @@ public class Crawler {
 
         update();
         status = CrawlerStatus.LEAVE_UNUSED;
+        WebSocketServer.sendInfo(Response.success(WebSocketCode.UPDATE_STATUS, id), id);
         log.info("头像采集完成 ====> " + id);
         return avatars;
     }
