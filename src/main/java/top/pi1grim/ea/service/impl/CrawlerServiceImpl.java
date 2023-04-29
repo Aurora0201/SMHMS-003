@@ -116,7 +116,6 @@ public class CrawlerServiceImpl implements CrawlerService {
 
     @Async
     public void deepSearch(Long id) {
-        WebSocketServer.sendInfo(WebSocketCode.UPDATE_STATUS, id);
         Crawler crawler = Crawler.getCrawler(id);
         List<ResultDTO> result = crawler.deepSearch();
         String response = template.postForObject(URL, result, String.class);
@@ -126,7 +125,6 @@ public class CrawlerServiceImpl implements CrawlerService {
             unwrap.forEach(resultService::insResult);
         }
         log.info("深度数据插入完成 ====> " + id);
-        WebSocketServer.sendInfo(WebSocketCode.UPDATE_STATUS, id);
         WebSocketServer.sendInfo(WebSocketCode.UPDATE_DATA, id);
     }
 
