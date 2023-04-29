@@ -238,7 +238,7 @@ public class Crawler {
             log.info("当前的QQ号 " + currentQqNumber + " ====> " + id);
 
         } catch (RuntimeException e) {
-            log.error("登录超时 ====> " + id);
+            log.info("登录超时 ====> " + id);
             WebSocketServer.sendInfo(Response.success(WebSocketCode.UPDATE_STATUS, id), id);
             return;
         }
