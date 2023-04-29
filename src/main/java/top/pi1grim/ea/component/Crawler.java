@@ -239,12 +239,12 @@ public class Crawler {
 
         } catch (RuntimeException e) {
             log.error("登录超时 ====> " + id);
-            WebSocketServer.sendInfo(WebSocketCode.UPDATE_STATUS, id);
+            WebSocketServer.sendInfo(Response.success(WebSocketCode.UPDATE_STATUS, id), id);
             throw new CrawlerException(ErrorCode.LOGIN_OVERTIME, id);
         }
         //登录成功
         log.info("Crawler登录成功 ====> " + id);
-        WebSocketServer.sendInfo(WebSocketCode.UPDATE_STATUS, id);
+        WebSocketServer.sendInfo(Response.success(WebSocketCode.UPDATE_STATUS, id), id);
         status = CrawlerStatus.LEAVE_UNUSED;
     }
 
@@ -267,7 +267,7 @@ public class Crawler {
         update();
 
         status = CrawlerStatus.DEEP_SEARCH;
-        WebSocketServer.sendInfo(WebSocketCode.UPDATE_STATUS, id);
+        WebSocketServer.sendInfo(Response.success(WebSocketCode.UPDATE_STATUS, id), id);
         List<ResultDTO> results = new ArrayList<>();
 
         int headCount = 0;
@@ -335,14 +335,14 @@ public class Crawler {
         }
         update();
         status = CrawlerStatus.LEAVE_UNUSED;
-        WebSocketServer.sendInfo(WebSocketCode.UPDATE_STATUS, id);
+        WebSocketServer.sendInfo(Response.success(WebSocketCode.UPDATE_STATUS, id), id);
         log.info("深度搜索结束 ====> " + id);
         return results;
     }
 
     public void listen() {
         status = CrawlerStatus.LISTEN;
-        WebSocketServer.sendInfo(WebSocketCode.UPDATE_STATUS, id);
+        WebSocketServer.sendInfo(Response.success(WebSocketCode.UPDATE_STATUS, id), id);
         log.info("进入监听模式 ====> " + id);
     }
 
