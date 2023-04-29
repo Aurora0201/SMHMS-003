@@ -22,6 +22,7 @@ public enum SuccessCode implements GenericEnum{
     START_DEEP_SUCCESS(2065, "启动深度搜索成功"),
     START_LISTEN_SUCCESS(2070, "启动实时监听成功"),
     UPDATE_AVATAR_SUCCESS(2075, "更新头像启动成功"),
+    RETURN_ID_SUCCESS(2080, "返回用户id成功"),
 
     ;
     private final int code;

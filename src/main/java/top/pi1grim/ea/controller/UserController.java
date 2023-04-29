@@ -135,4 +135,12 @@ public class UserController {
         log.info("获取用户配置信息成功 ====> " + dto);
         return Response.success(SuccessCode.RETURN_INFO_SUCCESS, dto);
     }
+
+    @GetMapping("/id")
+    @Operation(summary = "获取用户id信息API", description = "使用GET请求，成功返回新配置，成功代码2080")
+    public Response id(HttpServletRequest request) {
+        Long id = tokenService.getId(request);
+        log.info("获取用户id信息成功 ====> " + id);
+        return Response.success(SuccessCode.RETURN_INFO_SUCCESS, id);
+    }
 }
