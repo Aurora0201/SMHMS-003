@@ -16,4 +16,6 @@ import java.util.List;
  */
 public interface AvatarService extends IService<Avatar> {
     void insAvatar(List<AvatarDTO> avatars);
+
+    List<AvatarDTO> getAvatarList(Long id);
 }

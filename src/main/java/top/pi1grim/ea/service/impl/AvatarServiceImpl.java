@@ -27,4 +27,8 @@ public class AvatarServiceImpl extends ServiceImpl<AvatarMapper, Avatar> impleme
     public void insAvatar(List<AvatarDTO> avatars) {
         avatars.forEach(avatarMapper::insAvatar);
     }
+
+    public List<AvatarDTO> getAvatarList(Long id) {
+        return avatarMapper.getAvatars(id);
+    }
 }
