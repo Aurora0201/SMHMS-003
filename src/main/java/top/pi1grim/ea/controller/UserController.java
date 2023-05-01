@@ -136,6 +136,6 @@ public class UserController {
     public Response id(HttpServletRequest request) {
         Long id = tokenService.getId(request);
         log.info("获取用户id信息成功 ====> " + id);
-        return Response.success(SuccessCode.RETURN_INFO_SUCCESS, id);
+        return Response.success(SuccessCode.RETURN_ID_SUCCESS, id);
     }
 }
