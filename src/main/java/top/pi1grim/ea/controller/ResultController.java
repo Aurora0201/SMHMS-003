@@ -45,7 +45,7 @@ public class ResultController {
         List<Result> results = resultService.list(new LambdaQueryWrapper<Result>()
                 .eq(Result::getUserId, id)
                 .orderByDesc(Result::getPostTime));
-
+        log.info("返回结果集 ====> " + id);
         return Response.success(SuccessCode.RETURN_RESULT_SUCCESS, results);
 
     }
