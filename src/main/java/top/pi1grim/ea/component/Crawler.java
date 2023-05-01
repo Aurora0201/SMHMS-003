@@ -7,12 +7,14 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import top.pi1grim.ea.common.response.Response;
 import top.pi1grim.ea.dto.AvatarDTO;
 import top.pi1grim.ea.dto.NumberDTO;
 import top.pi1grim.ea.dto.ResultDTO;
 import top.pi1grim.ea.exception.CrawlerException;
 import top.pi1grim.ea.type.CrawlerStatus;
 import top.pi1grim.ea.type.ErrorCode;
+import top.pi1grim.ea.type.WebSocketCode;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -236,11 +238,13 @@ public class Crawler {
             log.info("当前的QQ号 " + currentQqNumber + " ====> " + id);
 
         } catch (RuntimeException e) {
-            log.error("登录超时 ====> " + id);
-            throw new CrawlerException(ErrorCode.LOGIN_OVERTIME, id);
+            log.info("登录超时 ====> " + id);
+            WebSocketServer.sendInfo(Response.success(WebSocketCode.UPDATE_STATUS, id), id);
+            return;
         }
         //登录成功
         log.info("Crawler登录成功 ====> " + id);
+        WebSocketServer.sendInfo(Response.success(WebSocketCode.UPDATE_STATUS, id), id);
         status = CrawlerStatus.LEAVE_UNUSED;
     }
 
@@ -259,14 +263,32 @@ public class Crawler {
         }
     }
 
+    private WebElement getContent(WebElement item) {
+        WebElement content = null;
+        try {
+            content = item.findElement(By.className("f-single-content"))
+                    .findElement(By.className("f-item"))
+                    .findElement(By.className("f-info"));
+        } catch (Exception e) {
+            log.info("无文字动态，跳过 ====> " + id);
+        }
+
+        return content;
+    }
+
     public List<ResultDTO> deepSearch() {
         update();
 
         status = CrawlerStatus.DEEP_SEARCH;
-
+        WebSocketServer.sendInfo(Response.success(WebSocketCode.UPDATE_STATUS, id), id);
         List<ResultDTO> results = new ArrayList<>();
 
+        int headCount = 0;
+
         for (Map.Entry<String, NumberDTO> entry : students.entrySet()) {
+
+            WebSocketServer.sendInfo(Response.success(WebSocketCode.HEAD_COUNT, headCount++), id);
+
             driver.get(URL + entry.getKey());
 
             try {
@@ -296,22 +318,21 @@ public class Crawler {
                 for (int i = 0; i < currentStep; i++) {
                     WebElement item = li.get(i);
 
-                    WebElement time = item.findElement(By.className("f-single-head"))
+                    String time = item.findElement(By.className("f-single-head"))
                             .findElement(By.className("user-info"))
                             .findElement(By.className("info-detail"))
-                            .findElement(By.xpath("span"));
-
-                    WebElement content = item.findElement(By.className("f-single-content"))
-                            .findElement(By.className("f-item"))
-                            .findElement(By.className("f-info"));
+                            .findElement(By.xpath("span"))
+                            .getText();
+                    WebElement contentEle = getContent(item);
+                    String content = contentEle == null ? "" : contentEle.getText();
 
                     ResultDTO dto = new ResultDTO()
                             .setUserId(id)
                             .setStuId(entry.getValue().getId())
                             .setNotes(entry.getValue().getNotes())
                             .setQqNumber(entry.getKey())
-                            .setContent(content.getText())
-                            .setPostTime(formatToLocalDateTime(time.getText()))
+                            .setContent(content)
+                            .setPostTime(formatToLocalDateTime(time))
                             .setDataType(false);
 
                     results.add(dto);
@@ -326,12 +347,14 @@ public class Crawler {
         }
         update();
         status = CrawlerStatus.LEAVE_UNUSED;
+        WebSocketServer.sendInfo(Response.success(WebSocketCode.UPDATE_STATUS, id), id);
         log.info("深度搜索结束 ====> " + id);
         return results;
     }
 
     public void listen() {
         status = CrawlerStatus.LISTEN;
+        WebSocketServer.sendInfo(Response.success(WebSocketCode.UPDATE_STATUS, id), id);
         log.info("进入监听模式 ====> " + id);
     }
 
@@ -342,8 +365,15 @@ public class Crawler {
 
         WebElement userPto = wait.until(ExpectedConditions.presenceOfElementLocated(By.className("user-pto")));
 
-        String content = wait.until(ExpectedConditions.presenceOfElementLocated(By.className("f-info")))
-                .getText();
+        String content = null;
+
+        try {
+            content = wait.until(ExpectedConditions.presenceOfElementLocated(By.className("f-info")))
+                    .getText();
+        } catch (Exception e) {
+            log.info("无文字动态，跳过 ====> " + id);
+            return null;
+        }
 
         String time = wait.until(ExpectedConditions.presenceOfElementLocated(By.className("info-detail")))
                 .findElement(By.xpath("span"))
@@ -378,6 +408,7 @@ public class Crawler {
 
         update();
         status = CrawlerStatus.UPDATE_AVATAR;
+        WebSocketServer.sendInfo(Response.success(WebSocketCode.UPDATE_STATUS, id), id);
         List<AvatarDTO> avatars = new ArrayList<>();
 
         for (Map.Entry<String, NumberDTO> entry : students.entrySet()) {
@@ -396,6 +427,7 @@ public class Crawler {
 
         update();
         status = CrawlerStatus.LEAVE_UNUSED;
+        WebSocketServer.sendInfo(Response.success(WebSocketCode.UPDATE_STATUS, id), id);
         log.info("头像采集完成 ====> " + id);
         return avatars;
     }

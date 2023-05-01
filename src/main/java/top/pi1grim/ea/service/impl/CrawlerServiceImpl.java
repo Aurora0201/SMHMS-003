@@ -7,13 +7,16 @@ import org.apache.commons.io.FileUtils;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+import top.pi1grim.ea.common.response.Response;
 import top.pi1grim.ea.common.utils.EntityUtils;
 import top.pi1grim.ea.component.Crawler;
+import top.pi1grim.ea.component.WebSocketServer;
 import top.pi1grim.ea.dto.*;
 import top.pi1grim.ea.entity.Student;
 import top.pi1grim.ea.entity.User;
 import top.pi1grim.ea.service.*;
 import top.pi1grim.ea.type.CrawlerStatus;
+import top.pi1grim.ea.type.WebSocketCode;
 
 import java.io.File;
 import java.io.IOException;
@@ -123,6 +126,7 @@ public class CrawlerServiceImpl implements CrawlerService {
             unwrap.forEach(resultService::insResult);
         }
         log.info("深度数据插入完成 ====> " + id);
+        WebSocketServer.sendInfo(Response.success(WebSocketCode.UPDATE_DATA, id), id);
     }
 
     @Async
@@ -152,6 +156,7 @@ public class CrawlerServiceImpl implements CrawlerService {
 
                 resultService.insResult(dto);
                 log.info("监听数据插入完成 ====> " + id);
+                WebSocketServer.sendInfo(Response.success(WebSocketCode.UPDATE_DATA, id), id);
             }
 
 
@@ -163,6 +168,7 @@ public class CrawlerServiceImpl implements CrawlerService {
         Crawler crawler = Crawler.getCrawler(id);
         List<AvatarDTO> avatars = crawler.updateAvatar();
         avatarService.insAvatar(avatars);
+        WebSocketServer.sendInfo(Response.success(WebSocketCode.UPDATE_AVATAR, id), id);
     }
 
     @Async

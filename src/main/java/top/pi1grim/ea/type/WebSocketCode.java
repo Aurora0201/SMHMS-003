@@ -9,7 +9,9 @@ public enum WebSocketCode implements GenericEnum{
 
     CONNECT_DONE(3000, "连接成功"),
     UPDATE_STATUS(3005, "更新状态"),
-    SEARCH_PROCESS(3010, "深度搜索过程"),
+    UPDATE_DATA(3010, "更新数据"),
+    UPDATE_AVATAR(3015, "更新头像"),
+    HEAD_COUNT(3020, "学生计数"),
 
 
     ;

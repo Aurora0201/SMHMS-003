@@ -16,4 +16,6 @@ import java.util.List;
  */
 public interface AvatarMapper extends BaseMapper<Avatar> {
     void insAvatar(AvatarDTO avatars);
+
+    List<AvatarDTO> getAvatars(Long id);
 }

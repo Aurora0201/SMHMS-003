@@ -4,8 +4,23 @@
     <insert id="insAvatar">
         INSERT INTO avatar(stu_id, avatar)
             VALUE(#{stuId}, #{avatar})
-            ON DUPLICATE KEY
+        ON DUPLICATE KEY
         UPDATE
             avatar = #{avatar};
     </insert>
+
+    <resultMap id="avatarDto" type="top.pi1grim.ea.dto.AvatarDTO">
+        <result column="stu_id" property="stuId"/>
+        <result column="avatar" property="avatar"/>
+    </resultMap>
+
+    <select id="getAvatars" resultMap="avatarDto">
+        SELECT
+            s.id stu_id,
+            a.avatar avatar
+        FROM
+            student s
+                JOIN avatar a ON s.id = a.stu_id
+        WHERE s.user_id = #{id}
+    </select>
 </mapper>
