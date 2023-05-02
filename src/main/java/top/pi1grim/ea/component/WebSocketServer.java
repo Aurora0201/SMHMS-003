@@ -69,7 +69,7 @@ public class WebSocketServer {
 
     @OnError
     public void onError(Throwable error) {
-        log.error("用户错误: " + id + ",原因: " + error.getMessage(), error);
+        log.error("用户错误: " + id + ",原因: " + error.getMessage());
     }
     /**
      * 实现服务器主动推送
