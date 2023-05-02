@@ -7,7 +7,7 @@ import lombok.Data;
 @Builder
 public class StudentDTO {
     private Long id;
-    private String number;
+    private String qqNumber;
     private String notes;
     private Boolean selected;
 }
