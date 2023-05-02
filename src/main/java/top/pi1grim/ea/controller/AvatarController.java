@@ -36,7 +36,7 @@ public class AvatarController {
     private TokenService tokenService;
 
     @GetMapping
-    @Operation(summary = "头像获取API", description = "使用GET请求，成功返回用户名，成功代码2080")
+    @Operation(summary = "头像获取API", description = "使用GET请求，成功返回用户名，成功代码2085")
     public Response getAvatar(HttpServletRequest request) {
         Long id = tokenService.getId(request);
         log.info("返回学生头像成功 ====> " + id);
