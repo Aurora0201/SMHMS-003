@@ -4,8 +4,8 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import java.time.LocalDateTime;
-import lombok.Getter;
-import lombok.Setter;
+
+import lombok.Data;
 import lombok.experimental.Accessors;
 
 /**
@@ -16,8 +16,7 @@ import lombok.experimental.Accessors;
  * @author Bin JunKai
  * @since 2023-04-28
  */
-@Getter
-@Setter
+@Data
 @Accessors(chain = true)
 public class Student {
 
