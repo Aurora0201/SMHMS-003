@@ -70,7 +70,7 @@ public class StudentController {
         student = studentService.getOneByNumberAndUserId(dto.getQqNumber(), id);
 
         log.info("保存学生信息成功 ====> " + student);
-        return Response.success(SuccessCode.ADD_STUDENT_SUCCESS, student);
+        return Response.success(SuccessCode.ADD_STUDENT_SUCCESS, dto);
     }
 
     @GetMapping
