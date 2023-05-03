@@ -56,7 +56,7 @@ public class StudentController {
 
         Long id = tokenService.getId(request);
 
-        if (Objects.nonNull(studentService.getOneByNumberAndUserId(dto.getNumber(), id))) {
+        if (Objects.nonNull(studentService.getOneByNumberAndUserId(dto.getQqNumber(), id))) {
             throw new StudentException(ErrorCode.STUDENT_EXIST, dto);
         }
 
@@ -67,7 +67,7 @@ public class StudentController {
 
         studentService.save(student);
 
-        student = studentService.getOneByNumberAndUserId(dto.getNumber(), id);
+        student = studentService.getOneByNumberAndUserId(dto.getQqNumber(), id);
 
         log.info("保存学生信息成功 ====> " + student);
         return Response.success(SuccessCode.ADD_STUDENT_SUCCESS, student);

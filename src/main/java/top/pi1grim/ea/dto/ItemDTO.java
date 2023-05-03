@@ -6,6 +6,6 @@ import lombok.Data;
 @Data
 @Builder
 public class ItemDTO {
-    private String number;
+    private String qqNumber;
     private String notes;
 }
