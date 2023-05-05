@@ -67,7 +67,7 @@ public class Crawler {
                 "--remote-allow-origins=*",
                 "--disable-gpu",
                 "--no-sandbox"
-//                ,"--headless" TODO:推送时移除
+                ,"--headless"
                 );
         OPTIONS.setPageLoadStrategy(PageLoadStrategy.EAGER);
         System.setProperty("webdriver.chrome.driver", "/usr/local/driver");
@@ -365,7 +365,7 @@ public class Crawler {
 
         WebElement userPto = wait.until(ExpectedConditions.presenceOfElementLocated(By.className("user-pto")));
 
-        String content = null;
+        String content;
 
         try {
             content = wait.until(ExpectedConditions.presenceOfElementLocated(By.className("f-info")))
