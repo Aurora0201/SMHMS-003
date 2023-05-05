@@ -112,7 +112,10 @@ public class CrawlerServiceImpl implements CrawlerService {
 
     public void destroy(Long id) {
         Crawler crawler = Crawler.getCrawler(id);
-        crawler.destroy();
+        if (Objects.nonNull(crawler)) {
+            crawler.destroy();
+        }
+        WebSocketServer.sendInfo(WebSocketCode.UPDATE_STATUS, id);
     }
 
     @Async
