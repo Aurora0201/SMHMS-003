@@ -86,7 +86,7 @@ public class CrawlerServiceImpl implements CrawlerService {
             User user = userService.getById(id);
             crawler.register(id, map, user.getStep());
         }
-
+        WebSocketServer.sendInfo(WebSocketCode.UPDATE_STATUS, id);
         File quickFile = crawler.getQuick();
         byte[] quickBytes = null;
 
