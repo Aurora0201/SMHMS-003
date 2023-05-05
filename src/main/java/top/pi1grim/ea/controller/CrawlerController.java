@@ -5,6 +5,10 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import top.pi1grim.ea.common.response.Response;
 import top.pi1grim.ea.exception.CrawlerException;
@@ -29,7 +33,7 @@ public class CrawlerController {
 
     @GetMapping("/login")
     @Operation(summary = "Crawler登录API", description = "使用GET请求，成功返回二维码，成功代码2050")
-    public Response login(HttpServletRequest request) {
+    public ResponseEntity<byte[]> login(HttpServletRequest request) {
 
         Long id = tokenService.getId(request);
 
@@ -38,7 +42,9 @@ public class CrawlerController {
         crawlerService.checkLogin(id);
         log.info("登录检测开始 ====> " + id);
 
-        return Response.success(SuccessCode.GET_QUICK_SUCCESS, quick);
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.IMAGE_PNG);
+        return new ResponseEntity<>(quick, headers, HttpStatus.OK);
     }
 
     @GetMapping("/status")
