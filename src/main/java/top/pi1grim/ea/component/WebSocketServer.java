@@ -31,7 +31,7 @@ public class WebSocketServer {
     /**
      * 连接建立成功调用的方法*/
     @OnOpen
-    public void onOpen(Session session, @PathParam("id") Long id) {
+    public synchronized void onOpen(Session session, @PathParam("id") Long id) {
         this.session = session;
         this.id = id;
         if(WEB_SOCKET_MAP.containsKey(id)){
@@ -58,7 +58,7 @@ public class WebSocketServer {
      * 连接关闭调用的方法
      */
     @OnClose
-    public void onClose() {
+    public synchronized void onClose() {
         if(WEB_SOCKET_MAP.containsKey(id)){
             WEB_SOCKET_MAP.remove(id);
             subOnlineCount();
