@@ -85,6 +85,7 @@ public class WebSocketServer {
     public static void sendInfo(Object message, Long id){
         try{
             if (Objects.nonNull(id) && WEB_SOCKET_MAP.containsKey(id)) {
+                log.info("发送信息：" + message + " ====> " + "接收用户：" + id);
                 WEB_SOCKET_MAP.get(id).sendMessage(message);
             } else {
                 log.info("用户" + id + ",不在线！");
