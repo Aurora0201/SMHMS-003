@@ -9,6 +9,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import top.pi1grim.ea.common.response.Response;
 import top.pi1grim.ea.dto.AvatarDTO;
+import top.pi1grim.ea.dto.DeepDTO;
 import top.pi1grim.ea.dto.NumberDTO;
 import top.pi1grim.ea.dto.ResultDTO;
 import top.pi1grim.ea.exception.CrawlerException;
@@ -283,11 +284,17 @@ public class Crawler {
         WebSocketServer.sendInfo(Response.success(WebSocketCode.UPDATE_STATUS, id), id);
         List<ResultDTO> results = new ArrayList<>();
 
-        int headCount = 0;
+        int headCount = 1;
 
         for (Map.Entry<String, NumberDTO> entry : students.entrySet()) {
 
-            WebSocketServer.sendInfo(Response.success(WebSocketCode.HEAD_COUNT, headCount++), id);
+            DeepDTO deepDto = DeepDTO.builder()
+                    .headCount(headCount++)
+                    .notes(entry.getValue().getNotes())
+                    .qqNumber(entry.getKey())
+                    .build();
+
+            WebSocketServer.sendInfo(Response.success(WebSocketCode.HEAD_COUNT, deepDto), id);
 
             driver.get(URL + entry.getKey());
 
