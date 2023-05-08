@@ -5,9 +5,8 @@ import lombok.Data;
 
 @Data
 @Builder
-public class StudentDTO {
-    private Long id;
+public class DeepDTO {
+    private int headCount;
     private String qqNumber;
     private String notes;
-    private Boolean selected;
 }

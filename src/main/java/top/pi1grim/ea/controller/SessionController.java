@@ -20,17 +20,17 @@ public class SessionController {
     @Resource
     private TokenService tokenService;
 
-    @PutMapping
+    @PutMapping("/{key}/{value}")
     @Operation(summary = "存储数据", description = "使用PUT请求，查询字符串携带key-value，成功代码2020")
-    public Response put(String key, String value, HttpServletRequest request) {
+    public Response put(@PathVariable String key, @PathVariable String value, HttpServletRequest request) {
         tokenService.sessionPut(request, key, value);
         log.info("存储了数据 ====> " + key + " : " + value);
         return Response.success(SuccessCode.SESSION_PUT, key);
     }
 
-    @GetMapping
+    @GetMapping("/{key}")
     @Operation(summary = "获取数据", description = "使用GET请求，查询字符串携带key，成功代码2025")
-    public Response get(String key, HttpServletRequest request) {
+    public Response get(@PathVariable String key, HttpServletRequest request) {
         log.info("获取了数据 ====> " + key);
         return Response.success(SuccessCode.SESSION_GET, tokenService.sessionGet(request, key));
     }

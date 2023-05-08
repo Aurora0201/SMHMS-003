@@ -14,5 +14,7 @@ public interface TokenService {
 
     String sessionGet(HttpServletRequest request, String key);
 
-    <T> T sessionGetObject(HttpServletRequest request, String key, Class<T> type);
+    <T> T sessionGet(HttpServletRequest request, String key, Class<T> type);
+
+    Long getId(HttpServletRequest request);
 }

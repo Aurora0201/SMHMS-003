@@ -20,9 +20,9 @@ public class Generator {
                 })
                 .strategyConfig(builder -> {
                     builder
-//                            .addInclude("student")
+                            .addInclude("result")
                             .entityBuilder()
-//                            .enableFileOverride()
+                            .enableFileOverride()
                             .enableLombok()
                             .enableRemoveIsPrefix()
                             .enableChainModel()

@@ -34,6 +34,7 @@ public class TokenCheck implements HandlerInterceptor {
             throw new TokenException(ErrorCode.TOKEN_EXPIRATION, null);
         }
         log.info("拦截用户请求 ====> " + json);
+        log.info("拦截路径 ====> " + request.getServletPath());
         return true;
     }
 }

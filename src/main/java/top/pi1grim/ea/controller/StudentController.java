@@ -1,6 +1,5 @@
 package top.pi1grim.ea.controller;
 
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -45,12 +44,7 @@ public class StudentController {
     @Resource
     private TokenService tokenService;
 
-    private Student getOneByNumberAndUserId(String number, Long id) {
-        return studentService.getOne(new LambdaQueryWrapper<Student>()
-                .eq(Student::getNumber, number)
-                .eq(Student::getUserId, id)
-                .eq(Student::getDeleted, false));
-    }
+
 
     @PostMapping
     @Operation(summary = "添加学生API", description = "使用POST请求，成功返回添加学生的信息，成功代码2030")
@@ -60,9 +54,9 @@ public class StudentController {
             throw new StudentException(ErrorCode.ILLEGAL_REQUEST_BODY, dto);
         }
 
-        Long id = tokenService.sessionGetObject(request, "id", Long.class);
+        Long id = tokenService.getId(request);
 
-        if (Objects.nonNull(getOneByNumberAndUserId(dto.getNumber(), id))) {
+        if (Objects.nonNull(studentService.getOneByNumberAndUserId(dto.getQqNumber(), id))) {
             throw new StudentException(ErrorCode.STUDENT_EXIST, dto);
         }
 
@@ -73,20 +67,18 @@ public class StudentController {
 
         studentService.save(student);
 
-        student = getOneByNumberAndUserId(dto.getNumber(), id);
+        student = studentService.getOneByNumberAndUserId(dto.getQqNumber(), id);
 
         log.info("保存学生信息成功 ====> " + student);
-        return Response.success(SuccessCode.ADD_STUDENT_SUCCESS, student);
+        return Response.success(SuccessCode.ADD_STUDENT_SUCCESS, dto);
     }
 
     @GetMapping
     @Operation(summary = "获取学生API", description = "使用GET请求，成功返回学生的信息，成功代码2035")
     public Response getStudent(HttpServletRequest request) {
 
-        Long id = tokenService.sessionGetObject(request, "id", Long.class);
-        List<Student> students = studentService.list(new LambdaQueryWrapper<Student>()
-                .eq(Student::getUserId, id)
-                .eq(Student::getDeleted, false));
+        Long id = tokenService.getId(request);
+        List<Student> students = studentService.listByUserIdIgnoreSelected(id);
 
         List<StudentDTO> dtoList = students.stream().map(student -> {
             StudentDTO dto = StudentDTO.builder().build();

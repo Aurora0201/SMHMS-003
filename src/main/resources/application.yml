@@ -3,6 +3,8 @@ spring:
     url: jdbc:mysql://101.42.30.159:3306/shmhs
     password: ${PASSWORD}
     username: root
+    hikari:
+      max-lifetime: 60000
   data:
     redis:
       host: 101.42.30.159

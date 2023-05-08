@@ -14,6 +14,9 @@ public enum ErrorCode{
     NOT_EXIST_USER(1020, HttpStatus.OK, "不存在的用户，请注册"),
     USERNAME_PASSWORD_MISMATCH(1025, HttpStatus.OK, "账号密码不匹配，请重新输入"),
     STUDENT_EXIST(1030, HttpStatus.OK, "学生已存在，请勿重复添加"),
+    LOGIN_OVERTIME(1035, HttpStatus.OK, "登录超时，请重新登录"),
+    REGISTER_FAIL(1040, HttpStatus.OK, "注册失败，请重新注册"),
+    WRONG_EXECUTE_TIMING(1045, HttpStatus.OK, "错误的执行时机"),
     ;
     private final int code;
     private final HttpStatus status;
